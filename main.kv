@@ -1,0 +1,22 @@
+#:kivy 1.10.0
+	
+<MainScreen>:
+    BoxLayout:
+        Button:
+            text: 'Load'
+            on_press: root.manager.current = 'load'
+        Button:
+            text: 'Unlock'
+            on_press: root.manager.current = 'unlock'
+
+<LoadScreen>:
+    BoxLayout:
+        Button:
+            text: 'Back'
+            on_press: root.manager.current = 'main'
+
+<UnlockScreen>:
+    BoxLayout:
+        Button:
+            text: 'Back'
+            on_press: root.manager.current = 'main'
