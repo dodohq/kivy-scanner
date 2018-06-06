@@ -8,7 +8,7 @@ from kivy.storage.jsonstore import JsonStore
 from kivy.uix.image import Image
 from kivy.clock import Clock
 from kivy.graphics.texture import Texture
-from kivy.properties import StringProperty
+from kivy.properties import StringProperty, ObjectProperty
 from scanner import Scanner
 
 presentation = Builder.load_file("main.kv")
@@ -31,8 +31,6 @@ class ScanWindow(Image):
         threading.Thread(target=self.call_scanner).start()
         pass
         
-    def stop_scan(self):
-        self.scanner.exit()
         
     def call_scanner(self):
         print("scanner called")
@@ -60,8 +58,8 @@ class ScreenManagement(ScreenManager):
 class MainScreen(Screen):
   pass
   
+##### PARCEL LOADING SCREEN #######
 class LoadScreen(Screen):
-
   scan_window = ObjectProperty(None)
   
   def __init__(self, **kwargs):
@@ -70,6 +68,10 @@ class LoadScreen(Screen):
 
   def load_scanner(self, **kwargs):
     pass
+    
+  def exit_scan(self):
+    print("exit scanner called")
+    self.scanner.exit()
     
   
 class UnlockScreen(Screen):
