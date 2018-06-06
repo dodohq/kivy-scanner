@@ -1,6 +1,15 @@
 #:kivy 1.10.0
 	
+<ScreenManagement>: 
+    MainScreen:
+   
+    LoadScreen:
+        
+    UnlockScreen:
+        
+	
 <MainScreen>:
+    name: 'main'
     BoxLayout:
         Button:
             text: 'Load'
@@ -10,12 +19,22 @@
             on_press: root.manager.current = 'unlock'
 
 <LoadScreen>:
+    name: 'load'
+    scan_window: window
+    
+    ScanWindow:
+        id: window
+        mode: 'load'
     BoxLayout:
+        Button: 
+            text: 'End scanning'
+            on_press: root.exit_scan
         Button:
             text: 'Back'
             on_press: root.manager.current = 'main'
 
 <UnlockScreen>:
+    name: 'unlock'
     BoxLayout:
         Button:
             text: 'Back'

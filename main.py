@@ -1,40 +1,84 @@
+import cv2
+import threading 
 from kivy.app import App
+from kivy.uix.widget import Widget
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.storage.jsonstore import JsonStore
+from kivy.uix.image import Image
+from kivy.clock import Clock
+from kivy.graphics.texture import Texture
+from kivy.properties import StringProperty
+from scanner import Scanner
 
 presentation = Builder.load_file("main.kv")
+   
+class ScanWindow(Image):
+    mode = StringProperty('')
+    
+    def __init__(self, **kwargs):
+        super(ScanWindow, self).__init__(**kwargs)
+        if (self.mode == 'load'):
+            self.load_parcels
+        elif (self.mode == 'unlock'):
+            pass
+        else: 
+            pass
+    
+        
+    def load_parcels(self):
+        print("load parcels called")
+        threading.Thread(target=self.call_scanner).start()
+        pass
+        
+    def stop_scan(self):
+        self.scanner.exit()
+        
+    def call_scanner(self):
+        print("scanner called")
+        while(True):
+            img = self.scanner.callback()
+            # convert image to texture
+            buf1 = cv2.flip(img, 0)
+            buf = buf1.tostring()
+            image_texture = Texture.create(
+                size=(frame.shape[1], frame.shape[0]), colorfmt='bgr')
+            image_texture.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
+            # display image from the texture
+            self.texture = image_texture
+            cv2.waitKey(1)
+        self.scanner.exit()
+            
+       
+class Storage():
+    def __init__(self, *args):
+        self.store =  JsonStore("store.json")
 
+class ScreenManagement(ScreenManager):
+  pass
+    
 class MainScreen(Screen):
   pass
   
 class LoadScreen(Screen):
-  pass
+
+  scan_window = ObjectProperty(None)
+  
+  def __init__(self, **kwargs):
+    super(LoadScreen, self).__init__(**kwargs)
+    self.scanner = Scanner()
+
+  def load_scanner(self, **kwargs):
+    pass
+    
   
 class UnlockScreen(Screen):
   pass
-    
-sm = ScreenManager()
-sm.add_widget(MainScreen(name='main'))
-sm.add_widget(LoadScreen(name='load'))
-sm.add_widget(UnlockScreen(name='unlock'))
-
-
-class Scanner(Widget):
-
-   def on_touch_down(self, touch):
-       if self.collide_point(*touch.pos):
-           self.pressed = touch.pos
-           # we consumed the touch. return False here to propagate
-           # the touch further to the children.
-           return True
-       return super(CustomBtn, self).on_touch_down(touch)
-
-   def on_pressed(self, instance, pos):
-       print ('pressed at {pos}'.format(pos=pos))
-
+  
+  
 class MainApp(App):
     def build(self):
-        return sm
+        return ScreenManagement()
 
 if __name__ == '__main__':
     MainApp().run()

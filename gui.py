@@ -4,12 +4,14 @@ from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ListProperty
 from kivy.lang import Builder
+from kivy.storage.jsonstore import JsonStore
 
 class RootWidget(BoxLayout):
 
    def __init__(self, **kwargs):
        super(RootWidget, self).__init__(**kwargs)
        
+       self.setup_store()
        load_btn = Button(text='Load parcel')
        load_btn.bind(pressed=self.load_pressed)
        self.add_widget(load_btn)
@@ -20,6 +22,9 @@ class RootWidget(BoxLayout):
 
    def btn_pressed(self, instance, pos):
        print ('pos: printed from root widget: {pos}'.format(pos=pos))
+       
+   def __setup_store(self):
+       self.store = JsonStore("store.json")
 
 class CustomBtn(Widget):
 
