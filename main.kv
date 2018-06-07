@@ -20,18 +20,19 @@
 
 <LoadScreen>:
     name: 'load'
-    scan_window: window
-    
-    ScanWindow:
-        id: window
-        mode: 'load'
+        
     BoxLayout:
-        Button: 
-            text: 'End scanning'
-            on_press: root.exit_scan
-        Button:
-            text: 'Back'
-            on_press: root.manager.current = 'main'
+        orientation: 'vertical'
+        KivyCamera:
+            id: scanner
+        BoxLayout: 
+            Button: 
+                text: 'Start Scanning'
+                size_hint: 0.5, 1
+                on_press: root.load_scanner()
+            Button: 
+                text: 'End scanning'
+                on_release: root.exit_scan()
 
 <UnlockScreen>:
     name: 'unlock'

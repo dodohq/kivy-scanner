@@ -35,7 +35,7 @@ class Scanner():
  
   def cv2_call(self):
     while(True): 
-      frame = camera.read()
+      frame = self.camera.read()
       # resize the frame and convert it to grayscale (while still
       # retaining 3 channels)
       frame = imutils.resize(frame, width=400)
@@ -43,7 +43,7 @@ class Scanner():
       #frame = np.dstack([frame, frame, frame])    
       decodedObjects = self.__decode(frame)
       self.display(frame, decodedObjects)
-      cv2.imshow("Results", im)
+      cv2.imshow("Results", frame)
       cv2.waitKey(1)
 	    
     cv2.destroyAllWindows()
@@ -60,6 +60,6 @@ class Scanner():
     self.camera.stop()
 
 if __name__ == "__main__":
-  s = Scanner()
-  s.call()
+  s = Scanner(2)
+  s.cv2_call()
   print(s.decoded)
