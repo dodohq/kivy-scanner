@@ -1,0 +1,148 @@
+#:kivy 1.10.0
+#:set default_font_size "40sp"
+
+<ScreenManagement>: 
+    MainScreen:
+
+    LoginScreen:
+   
+    LoadScreen:
+        
+    UnlockScreen:
+        
+	
+<MainScreen>:
+    name: 'main'
+    canvas.before:
+        Rectangle: 
+            pos: self.pos
+            size: self.size
+            source: app.load_resource('background.png')
+        
+    FloatLayout:
+        Image: 
+            size_hint: (.2, .2)
+            pos_hint: {'center_x': .5, 'center_y': .8}
+            source: app.load_resource('logo.png')
+        FloatLayout:
+            size_hint: 0.7, 0.3
+            pos_hint: {'center_x': .5, 'center_y': .4}
+            RoundedButton:
+                on_press: root.manager.current = 'load'
+                size_hint: 0.3, 0.7
+                pos_hint: {'center_x': .3, 'center_y': .8}
+                Label: 
+                    text: 'Load'
+                    color: 0,0,0,1
+                    x: self.parent.x + 70
+                    y: self.parent.y + 7
+                Image: 
+                    source: app.load_resource('trolley.png')
+                    allow_stretch: True
+                    width: 50
+                    pos: self.parent.x + 35, self.parent.height + 120
+            RoundedButton:
+                on_press: root.manager.current = 'unlock'
+                size_hint: 0.3, 0.7
+                pos_hint: {'center_x': .7, 'center_y': .8}
+                Label: 
+                    text: 'Unlock'
+                    color: 0,0,0,1
+                    x: self.parent.x + 70
+                    y: self.parent.y + 7
+                Image: 
+                    source: app.load_resource('padlock.png')
+                    width: 50
+                    allow_stretch: True
+                    pos: self.parent.x + 35, self.parent.height + 120
+
+<LoadScreen>:
+    name: 'load'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        RoundedLabel: 
+            text: 'Load your parcels'
+            font_size: 20
+            size_hint: 1, 0.1
+        KivyCamera:
+            id: scanner
+            size_hint: 1, 0.7
+        BoxLayout: 
+            size_hint: 1, 0.2
+            padding: 10
+            spacing: 100
+            RoundedButton: 
+                text: 'Start Scanning'
+                on_press: root.load_scanner()
+            RoundedButton: 
+                text: 'End scanning'
+                on_release: root.exit_scan()
+
+<LoginScreen>:
+    name: 'login'
+    BoxLayout:
+        text: "Unlock your parcel"
+        orientation: 'vertical'
+        padding: 140
+        spacing: 10
+        TextInput: 
+            id: id
+            hint_text: "Parcel ID"
+            multiline: False
+            write_tab: False
+        TextInput:
+            id: password
+            hint_text: "Password"
+            multiline: False
+            password: True
+            write_tab: False
+        RoundedButton: 
+            border: 30,30,30,30
+            text: 'Unlock'
+            font_size: 30
+            on_press: root.unlock(id.text, password.text)
+        
+
+<UnlockScreen>:
+    name: 'unlock'
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        RoundedLabel: 
+            text: 'Scan the QR code in the SMS you received to unlock your parcel!'
+            font_size: 15
+            size_hint: 1, 0.1
+        KivyCamera:
+            id: scanner
+            size_hint: 1, 0.7
+        BoxLayout: 
+            size_hint: 1, 0.2
+            padding: 10
+            spacing: 40
+            RoundedButton: 
+                text: 'Can\'t scan? Input the details from your SMS!'
+                on_press: root.manager.current = 'login'
+            RoundedButton: 
+                text: 'End scanning'
+                on_release: root.exit_scan()
+
+<RoundedLabel@Label>:
+    background_color: 0,0,0,0
+    canvas.before:
+        Color: 
+            rgba: (1,.6,0,1)
+        RoundedRectangle: 
+            pos: self.pos
+            size: self.size
+            radius: [30,]
+
+<RoundedButton@Button>:
+    background_normal: app.load_resource('buttonnorm.png')
+    background_down: app.load_resource('buttondown.png')
+
+<Popup>:
+    title_color: 1,.6,0,1
+    title_size: 17
+    title_align: 'center'
+    background: app.load_resource('popup.png')

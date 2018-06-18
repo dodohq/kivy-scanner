@@ -1,0 +1,29 @@
+{
+  "lockers": [
+    {
+      "has_parcel": false,
+      "id": "L1",
+      "parcel_id": ""
+    },
+    {
+      "has_parcel": true,
+      "id": "L2",
+      "parcel_id": "5b1e2dd3dd485700143699bd"
+    },
+    {
+      "has_parcel": false,
+      "id": "L3",
+      "parcel_id": ""
+    },
+    {
+      "has_parcel": false,
+      "id": "L4",
+      "parcel_id": ""
+    },
+    {
+      "has_parcel": false,
+      "id": "L5",
+      "parcel_id": ""
+    }
+  ]
+}
