@@ -3,7 +3,7 @@ import json
 import requests
 from kivy.app import App
 from kivy.lang import Builder
-from kivy.core.window import Window
+from kivy.config import Config
 from kivy.uix.widget import Widget
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
@@ -14,6 +14,7 @@ from auth import HEADERS
 import config
 
 presentation = Builder.load_file("main.kv")
+Config.set('graphics', 'resizeable', '0')
 
 
 class ScreenManagement(ScreenManager):
@@ -62,7 +63,7 @@ class MainApp(App):
     
     def build(self):
         global capture 
-        capture = WebcamVideoStream(src=0).start()
+        capture = WebcamVideoStream(src=1).start()
         return ScreenManagement()
     
     def on_stop(self):

@@ -35,12 +35,12 @@
                     text: 'Load'
                     color: 0,0,0,1
                     x: self.parent.x + 70
-                    y: self.parent.y + 7
+                    y: self.parent.y 
                 Image: 
                     source: app.load_resource('trolley.png')
                     allow_stretch: True
                     width: 50
-                    pos: self.parent.x + 35, self.parent.height + 120
+                    pos: self.parent.x + 35, self.parent.height + 80
             RoundedButton:
                 on_press: root.manager.current = 'unlock'
                 size_hint: 0.3, 0.7
@@ -49,12 +49,12 @@
                     text: 'Unlock'
                     color: 0,0,0,1
                     x: self.parent.x + 70
-                    y: self.parent.y + 7
+                    y: self.parent.y 
                 Image: 
                     source: app.load_resource('padlock.png')
                     width: 50
                     allow_stretch: True
-                    pos: self.parent.x + 35, self.parent.height + 120
+                    pos: self.parent.x + 35, self.parent.height + 85
 
 <LoadScreen>:
     name: 'load'
