@@ -1,6 +1,9 @@
 import os
+import sys
 import json
 import requests
+import subprocess
+import threading
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.config import Config
@@ -49,7 +52,7 @@ class LoginScreen(Screen):
     def unlock(self, id, password):
         robot_auth = {'Content-Type': 'application/json', 'Authorization': config.ROBOT_TOKEN}
         data = {"id" : id, "password": password}
-        res = requests.post(config.URL+'api/parcel/unlock', json=data, headers=robot_auth)
+        res = requests.post(config.URL+'/api/parcel/unlock', json=data, headers=robot_auth)
         print(res.json)
         if (res.status_code == requests.codes.ok):
             Storage().get_parcel(id)
@@ -62,6 +65,7 @@ class LoginScreen(Screen):
 class MainApp(App):
     
     def build(self):
+        t = threading.Thread(target=self.load_websocket).start()
         global capture 
         capture = WebcamVideoStream(src=1).start()
         return ScreenManagement()
@@ -75,5 +79,24 @@ class MainApp(App):
     def load_resource(self, string):
         return os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources/'+string))            
   
+    def load_websocket(self):
+        path = os.path.abspath(os.path.dirname(__file__))
+        p = subprocess.Popen([sys.executable, path+'/ffmpeg.py'], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+        # while child process has not yet terminated 
+        # while p.poll() is not None and p.poll() is not None:
+        #     print("comm: ", p.communicate())
+        #     print("return: ", p.returncode)
+        # error = p.communicate()[0]
+        
+        popup = Popup(title="Error",
+                        content=Label(text="""Internal Websocket Error:
+                        \nThe robot couldn't connect to the websocket.
+                        \nTrying again..\n""",
+                        color=(0,0,0,1) ),
+                        size_hint=(None, None), size=(400, 400))
+        popup.open()
+        self.load_websocket()
+        
+        
 if __name__ == '__main__':
     MainApp().run()

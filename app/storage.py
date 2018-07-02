@@ -14,7 +14,7 @@ class Storage():
         self.parcels_path =  STORE_DIR + "/parcels.json"
         with open(self.parcels_path) as f:
             self.parcels = json.load(f)['parcels']
-        self.server_parcels = requests.get(config.URL+'api/parcel', headers=HEADERS).json()['parcels']
+        self.server_parcels = requests.get(config.URL+'/api/parcel', headers=HEADERS).json()['parcels']
         
     def load_parcel(self, parcel_id):
         # if parcel is already loaded in robot
@@ -33,7 +33,7 @@ class Storage():
                 if locker["has_parcel"] == False:
                     robot_auth = {'Content-Type': 'application/json', 'Authorization': config.ROBOT_TOKEN}
                     data = {'id': parcel_id, 'robot_compartment': locker['id']}
-                    req = requests.post(config.URL+'api/parcel/load', headers=robot_auth, json=data)
+                    req = requests.post(config.URL+'/api/parcel/load', headers=robot_auth, json=data)
                     print(req)
                     if(req.status_code == requests.codes.ok):
                         for p in self.server_parcels:
@@ -64,7 +64,7 @@ class Storage():
                 try: 
                     if locker['parcel_id'] == code['id']:
                         robot_auth = {'Content-Type': 'application/json', 'Authorization': config.ROBOT_TOKEN}
-                        req = requests.post(config.URL+'api/parcel/unlock', headers=robot_auth, json=code)
+                        req = requests.post(config.URL+'/api/parcel/unlock', headers=robot_auth, json=code)
                         print(req)
                         if (req.status_code == requests.codes.ok):  
                             return self.get_parcel(code['id'])
