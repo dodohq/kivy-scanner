@@ -12,7 +12,7 @@ import time
 
 WSSERVER = 'wss://backdemo.herokuapp.com'
 STREAMSERVER = config.URL
-TOKEN = config.ROBOT_TOKEN + 'wrong'
+TOKEN = config.ROBOT_TOKEN
 
 
 def on_message(ws, message):

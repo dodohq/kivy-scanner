@@ -83,10 +83,10 @@ class MainApp(App):
         path = os.path.abspath(os.path.dirname(__file__))
         p = subprocess.Popen([sys.executable, path+'/ffmpeg.py'], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         # while child process has not yet terminated 
-        # while p.poll() is not None and p.poll() is not None:
-        #     print("comm: ", p.communicate())
-        #     print("return: ", p.returncode)
-        # error = p.communicate()[0]
+        while p.poll() is not None and p.poll() is not None:
+            print("comm: ", p.communicate())
+            print("return: ", p.returncode)
+        error = p.communicate()[0]
         
         popup = Popup(title="Error",
                         content=Label(text="""Internal Websocket Error:
