@@ -60,6 +60,6 @@ class Scanner():
     self.camera.stop()
 
 if __name__ == "__main__":
-  s = Scanner(2)
+  s = Scanner(1)
   s.cv2_call()
   print(s.decoded)

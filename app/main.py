@@ -67,7 +67,7 @@ class MainApp(App):
     def build(self):
         t = threading.Thread(target=self.load_websocket).start()
         global capture 
-        capture = WebcamVideoStream(src=1).start()
+        capture = WebcamVideoStream(src=0).start()
         return ScreenManagement()
     
     def on_stop(self):
