@@ -64,7 +64,9 @@ class KivyCamera(Image):
             
     def listening(self, dt):
         if (code and self.mode=="load"):
-            self.store.load_parcel(code)
+            result = self.store.load_parcel(code)
+            if result == "Filled":
+                self.parent.parent.go_to_unlock()
         elif (code and self.mode=="unlock"):
             got_code = self.store.unlock_parcel(code)
             self.t.join()

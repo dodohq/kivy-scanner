@@ -36,6 +36,13 @@ class LoadScreen(Screen):
     self.ids.scanner.stop()
     self.manager.current = "main"
     print("exit scanner called")
+
+  def go_to_unlock(self):
+    self.manager.current = "unlock"
+
+# RoundedButton: 
+#                 text: 'End scanning'
+#                 on_release: root.exit_scan()
     
 ##### UNLOCKING LOCKER SCREEN #######  
 class UnlockScreen(Screen):

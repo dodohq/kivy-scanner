@@ -4,6 +4,7 @@ import os
 import json
 import requests
 import config
+import unlock
 from auth import HEADERS
 
 STORE_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'store'))    
@@ -49,6 +50,21 @@ class Storage():
                                             size_hint=(None, None), size=(400, 400))
                                 popup.open()
                                 return True
+
+            # check if all lockers are filled 
+            if all(l['has_parcels']==True for l in self.lockers):
+                box = FloatLayout()
+                box.add_widget(Label(text="All the lockers are filled! Do you want to finish loading?",
+                                    pos_hint=('center_x':0.5, 'center_y':0.7)))
+                box.add_widget(Button(text="Finish",
+                                    pos_hint=('center_x':0.5, 'center_y':0.4)))
+
+                popup = Popup(title="Finished!",
+                            content=box, color=(0,0,0,1)),
+                            size_hint=(None, None), size=(400, 400))
+                popup.open()
+                return "Filled"
+
                     else: 
                         print("server error: ", req.json())
         else: 
@@ -66,7 +82,8 @@ class Storage():
                         robot_auth = {'Content-Type': 'application/json', 'Authorization': config.ROBOT_TOKEN}
                         req = requests.post(config.URL+'/api/parcel/unlock', headers=robot_auth, json=code)
                         print(req)
-                        if (req.status_code == requests.codes.ok):  
+                        if (req.status_code == requests.codes.ok):
+                            unlock.unlock(locker['id'])  
                             return self.get_parcel(code['id'])
                 except KeyError:
                     pass

@@ -10,18 +10,7 @@ def unlock(locker):
   gpio.setup(pin, gpio.OUT)
   gpio.output(pin, 1)
   time.sleep(5)
-  gpio.cleanup(pin)
   return 0
   
   
 
-class GPIO():
-  def __init__():
-    pass
-    
-if __name__ == "__main__": 
-  for locker, pin in locker_to_gpio.items():
-    print(pin)
-    # gpio.cleanup(int(pin)) 
-    unlock(locker)
-    print('unlocked '+locker, gpio.read(locker_to_gpio[locker]))
