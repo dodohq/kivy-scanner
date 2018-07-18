@@ -73,10 +73,26 @@ class MainApp(App):
     
     def build(self):
         t = threading.Thread(target=self.load_websocket).start()
-        global capture 
-        capture = WebcamVideoStream(src=0).start()
+        self.on_capture()
         return ScreenManagement()
     
+    def on_capture(self):
+        global capture 
+        capture = WebcamVideoStream(src=0).start()
+        if not capture.read().any():
+            box = FloatLayout()
+            label = Label(text="Camera not detected!", color=(0,0,0,1))
+            button = Button(text="Try again", 
+                    pos_hint={'center_x':0.5, 'center_y':0.3})
+            button.bind(on_press=self.on_capture())
+            box.add_widget(label)
+            box.add_widget(button)
+            
+            popup = Popup(title="Error",
+                        content=box,
+                        size_hint=(None, None), size=(400, 400))
+            popup.open()
+
     def on_stop(self):
         global capture
         if capture: 

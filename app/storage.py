@@ -55,18 +55,18 @@ class Storage():
             if all(l['has_parcels']==True for l in self.lockers):
                 box = FloatLayout()
                 box.add_widget(Label(text="All the lockers are filled! Do you want to finish loading?",
-                                    pos_hint=('center_x':0.5, 'center_y':0.7)))
+                                    pos_hint={'center_x':0.5, 'center_y':0.7}))
                 box.add_widget(Button(text="Finish",
-                                    pos_hint=('center_x':0.5, 'center_y':0.4)))
+                                    pos_hint={'center_x':0.5, 'center_y':0.4}))
 
                 popup = Popup(title="Finished!",
-                            content=box, color=(0,0,0,1)),
+                            content=box, color=(0,0,0,1),
                             size_hint=(None, None), size=(400, 400))
                 popup.open()
                 return "Filled"
 
-                    else: 
-                        print("server error: ", req.json())
+            else: 
+                print("server error: ", req.json())
         else: 
             print(parcel_id, " not recognized, or lockers are full")
 
