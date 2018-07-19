@@ -1,7 +1,12 @@
 import cv2
+import time
 import threading
 import pyzbar.pyzbar as pyzbar 
 from kivy.uix.image import Image
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.button import Button
+from kivy.uix.label import Label
+from kivy.uix.popup import Popup
 from kivy.graphics.texture import Texture
 from kivy.clock import Clock
 from storage import Storage
@@ -63,16 +68,45 @@ class KivyCamera(Image):
         return im
             
     def listening(self, dt):
+        print("listen thread called")
+        # try:
         if (code and self.mode=="load"):
             result = self.store.load_parcel(code)
             if result == "Filled":
                 self.parent.parent.go_to_unlock()
+            
         elif (code and self.mode=="unlock"):
             got_code = self.store.unlock_parcel(code)
             self.t.join()
             self.parent.parent.exit_scan()
+
+        # except ValueError as e:
+        #     Clock.unschedule(self.listening)
+        #     box = FloatLayout()
+        #     box.add_widget(Label(text="""Something went wrong with the server.
+        #             \nThe parcel failed to load into the robot.""",
+        #             pos_hint={'center_x': 0.5, 'center_y': 0.5},
+        #             color=(0,0,0,1)))
+        #     button = RoundedButton(text="Try again!",
+        #             pos_hint={'center_x': 0.5, 'center_y': 0.4},
+        #             size_hint=(0.3, 0.1), 
+        #             color=(0,0,0,1))
+        #     button.bind(on_press=self.restart_listening)
+        #     box.add_widget(button)
+        #     popup = Popup(title="Error",
+        #             content=box,
+        #             size_hint=(None, None), size=(400, 400))
+        #     popup.open()
+        #     print("caught error, ", e.args)
        
-    def listen_thread(self):
+    def restart_listening(self, **kwargs):
+        time.sleep(5)
+        Clock.schedule_interval(self.listening, 1)
+
+    def listen_thread(self, **kwargs):
         Clock.schedule_interval(self.listening, 2)
             
+
+class RoundedButton(Button):
+    pass
     

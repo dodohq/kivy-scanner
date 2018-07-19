@@ -1,54 +1,54 @@
 {
   "lockers": [
     {
-      "has_parcel": false,
+      "has_parcel": true,
       "id": "L1",
-      "parcel_id": ""
+      "parcel_id": "5b507882fef71c001418c333"
     },
     {
-      "has_parcel": false,
+      "has_parcel": true,
       "id": "L2",
-      "parcel_id": ""
+      "parcel_id": "5b509988b7fdb70014967366"
     },
     {
-      "has_parcel": false,
+      "has_parcel": true,
       "id": "L3",
-      "parcel_id": ""
+      "parcel_id": "5b509991b7fdb70014967367"
     },
     {
-      "has_parcel": false,
+      "has_parcel": true,
       "id": "L4",
-      "parcel_id": ""
+      "parcel_id": "5b5099b3b7fdb70014967368"
     },
     {
-      "has_parcel": false,
+      "has_parcel": true,
       "id": "L5",
-      "parcel_id": ""
+      "parcel_id": "5b5099c0b7fdb70014967369"
     },
     {
-      "has_parcel": false,
+      "has_parcel": true,
       "id": "L6",
-      "parcel_id": ""
+      "parcel_id": "5b5099cbb7fdb7001496736a"
     },
     {
-      "has_parcel": false,
+      "has_parcel": true,
       "id": "L7",
-      "parcel_id": ""
+      "parcel_id": "5b5099d8b7fdb7001496736b"
     },
     {
-      "has_parcel": false,
+      "has_parcel": true,
       "id": "L8",
-      "parcel_id": ""
+      "parcel_id": "5b5099e2b7fdb7001496736c"
     },
     {
-      "has_parcel": false,
+      "has_parcel": true,
       "id": "L9",
-      "parcel_id": ""
+      "parcel_id": "5b5099ecb7fdb7001496736d"
     },
     {
-      "has_parcel": false,
+      "has_parcel": true,
       "id": "L10",
-      "parcel_id": ""
+      "parcel_id": "5b509e8fb7fdb70014967371"
     },
     {
       "has_parcel": false,

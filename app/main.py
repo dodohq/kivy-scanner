@@ -10,10 +10,10 @@ from kivy.config import Config
 from kivy.uix.widget import Widget
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
+from kivy.uix.button import Button
 from kivy.uix.screenmanager import ScreenManager, Screen
 from imutils.video import WebcamVideoStream
 from camera import KivyCamera
-from config import HEADERS
 import config
 
 presentation = Builder.load_file("main.kv")
@@ -33,18 +33,15 @@ class LoadScreen(Screen):
     if captured: 
       self.ids.scanner.start(mode="load", capture=capture)
         
-    
   def exit_scan(self):
     self.ids.scanner.stop()
     self.manager.current = "main"
     print("exit scanner called")
 
   def go_to_unlock(self):
+    self.ids.scanner.stop()
     self.manager.current = "unlock"
-
-# RoundedButton: 
-#                 text: 'End scanning'
-#                 on_release: root.exit_scan()
+    
     
 ##### UNLOCKING LOCKER SCREEN #######  
 class UnlockScreen(Screen):
@@ -56,12 +53,12 @@ class UnlockScreen(Screen):
     self.manager.current = "main" 
     print("exit scanner called")
 
+
 ##### UNLOCK LOGIN SCREEN #######
 class LoginScreen(Screen):
     def unlock(self, id, password):
-        robot_auth = {'Content-Type': 'application/json', 'Authorization': config.ROBOT_TOKEN}
         data = {"id" : id, "password": password}
-        res = requests.post(config.URL+'/api/parcel/unlock', json=data, headers=robot_auth)
+        res = requests.post(config.URL+'/api/parcel/unlock', json=data, headers=config.HEADERS)
         print(res.json)
         if (res.status_code == requests.codes.ok):
             Storage().get_parcel(id)

@@ -1,11 +1,11 @@
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
+from kivy.uix.button import Button
 import os
 import json
 import requests
 import config
 import unlock
-from config import HEADERS
 
 STORE_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'store'))    
 
@@ -15,62 +15,53 @@ class Storage():
         self.parcels_path =  STORE_DIR + "/parcels.json"
         with open(self.parcels_path) as f:
             self.parcels = json.load(f)['parcels']
-        req = requests.get(config.URL+'/api/parcel', headers=HEADERS).json()
-        print("req: ", req)
-        self.server_parcels = req['parcels']
         
     def load_parcel(self, parcel_id):
+        print('loading parcel')
         # if parcel is already loaded in robot
         if parcel_id in [p['id'] for p in self.parcels]:
             print("parcel already loaded")
             return False
 
-        # if parcel is not yet loaded & is a company parcel
-        elif parcel_id in [p['_id'] for p in self.server_parcels]:  
-            print(parcel_id, " found")
-            with open(self.lockers_path) as f:
-                self.lockers = json.load(f)['lockers']
+        # if parcel is not yet loaded 
+        with open(self.lockers_path) as f:
+            self.lockers = json.load(f)['lockers']
 
-            # get the first empty locker    
-            for locker in self.lockers:
-                if locker["has_parcel"] == False:
-                    robot_auth = {'Content-Type': 'application/json', 'Authorization': config.ROBOT_TOKEN}
-                    data = {'id': parcel_id, 'robot_compartment': locker['id']}
-                    req = requests.post(config.URL+'/api/parcel/load', headers=robot_auth, json=data)
-                    print(req)
-                    if(req.status_code == requests.codes.ok):
-                        for p in self.server_parcels:
-                            if p['_id'] == parcel_id:
-                                print('locker chosen: ', locker['id'])
-                                locker['parcel_id'] = parcel_id
-                                locker['has_parcel'] = True
-                                self.parcels.append({'id': parcel_id, 'address': p['address'], 'contact': p['customer_contact'], 'date_of_delivery': p['date_of_delivery']})
-                                self.write_to_store()
-                                popup = Popup(title="Parcel Registered!",
-                                            content=Label(text="Load parcel [color=ffb355]\'"+str(parcel_id)+"\'[/color] onto "+locker['id']+".",
-                                            markup=True, color=(0,0,0,1)),
-                                            size_hint=(None, None), size=(400, 400))
-                                popup.open()
-                                return True
+        # get the first empty locker    
+        for locker in self.lockers:
+            if locker["has_parcel"] == False:
+                data = {'id': parcel_id, 'robot_compartment': locker['id']}
+                req = requests.post(config.URL+'/api/parcel/load', headers=config.HEADERS, json=data)
+                print(req)
+                if(req.status_code == requests.codes.ok):
+                    locker['parcel_id'] = parcel_id
+                    locker['has_parcel'] = True
+                    self.parcels.append({'id': parcel_id, 'locker': locker['id']})
+                    self.write_to_store()
+                    popup = Popup(title="Parcel Registered!",
+                                content=Label(text="Load parcel [color=ffb355]\'"+str(parcel_id)+"\'[/color] onto "+locker['id']+".",
+                                markup=True, color=(0,0,0,1)),
+                                size_hint=(None, None), size=(400, 400))
+                    popup.open()
+                    return True
+                else: 
+                    raise ValueError(req.json())
+                    return False
 
-            # check if all lockers are filled 
-            if all(l['has_parcels']==True for l in self.lockers):
-                box = FloatLayout()
-                box.add_widget(Label(text="All the lockers are filled! Do you want to finish loading?",
-                                    pos_hint={'center_x':0.5, 'center_y':0.7}))
-                box.add_widget(Button(text="Finish",
-                                    pos_hint={'center_x':0.5, 'center_y':0.4}))
 
-                popup = Popup(title="Finished!",
-                            content=box, color=(0,0,0,1),
-                            size_hint=(None, None), size=(400, 400))
-                popup.open()
-                return "Filled"
+        # check if all lockers are filled 
+        if all(l['has_parcel']==True for l in self.lockers):
+            box = FloatLayout()
+            box.add_widget(Label(text="All the lockers are filled! Do you want to finish loading?",
+                                pos_hint={'center_x':0.5, 'center_y':0.7}))
+            box.add_widget(Button(text="Finish",
+                                pos_hint={'center_x':0.5, 'center_y':0.4}))
+            popup = Popup(title="Finished!",
+                        content=box, color=(0,0,0,1),
+                        size_hint=(None, None), size=(400, 400))
+            popup.open()
+            return "Filled"
 
-            else: 
-                print("server error: ", req.json())
-        else: 
-            print(parcel_id, " not recognized, or lockers are full")
 
     def unlock_parcel(self, code):
         print(code)
@@ -81,8 +72,7 @@ class Storage():
             for locker in self.lockers:
                 try: 
                     if locker['parcel_id'] == code['id']:
-                        robot_auth = {'Content-Type': 'application/json', 'Authorization': config.ROBOT_TOKEN}
-                        req = requests.post(config.URL+'/api/parcel/unlock', headers=robot_auth, json=code)
+                        req = requests.post(config.URL+'/api/parcel/unlock', headers=config.HEADERS, json=code)
                         print(req)
                         if (req.status_code == requests.codes.ok):
                             unlock.unlock(locker['id'])  
@@ -99,8 +89,8 @@ class Storage():
             popup.open()
             return False
 
+
     def get_parcel(self, id):
-        print('get_parcel called')
         locker = ''
         for index, parcel in enumerate(self.parcels):
             if parcel['id'] == id:

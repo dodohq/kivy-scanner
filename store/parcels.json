@@ -1,10 +1,44 @@
 {
   "parcels": [
     {
-      "address": "Yishun St 81 S760839",
-      "contact": "96959382",
-      "date_of_delivery": "2018-06-10T03:51:13.972Z",
-      "id": "5b1e2dd3dd485700143699bd"
+      "id": "5b507882fef71c001418c333",
+      "locker": "L1"
+    },
+    {
+      "id": "5b509988b7fdb70014967366",
+      "locker": "L2"
+    },
+    {
+      "id": "5b509991b7fdb70014967367",
+      "locker": "L3"
+    },
+    {
+      "id": "5b5099b3b7fdb70014967368",
+      "locker": "L4"
+    },
+    {
+      "id": "5b5099c0b7fdb70014967369",
+      "locker": "L5"
+    },
+    {
+      "id": "5b5099cbb7fdb7001496736a",
+      "locker": "L6"
+    },
+    {
+      "id": "5b5099d8b7fdb7001496736b",
+      "locker": "L7"
+    },
+    {
+      "id": "5b5099e2b7fdb7001496736c",
+      "locker": "L8"
+    },
+    {
+      "id": "5b5099ecb7fdb7001496736d",
+      "locker": "L9"
+    },
+    {
+      "id": "5b509e8fb7fdb70014967371",
+      "locker": "L10"
     }
   ]
 }
