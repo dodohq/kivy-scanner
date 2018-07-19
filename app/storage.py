@@ -5,7 +5,7 @@ import json
 import requests
 import config
 import unlock
-from auth import HEADERS
+from config import HEADERS
 
 STORE_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'store'))    
 
@@ -15,7 +15,9 @@ class Storage():
         self.parcels_path =  STORE_DIR + "/parcels.json"
         with open(self.parcels_path) as f:
             self.parcels = json.load(f)['parcels']
-        self.server_parcels = requests.get(config.URL+'/api/parcel', headers=HEADERS).json()['parcels']
+        req = requests.get(config.URL+'/api/parcel', headers=HEADERS).json()
+        print("req: ", req)
+        self.server_parcels = req['parcels']
         
     def load_parcel(self, parcel_id):
         # if parcel is already loaded in robot

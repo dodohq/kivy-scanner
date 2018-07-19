@@ -13,7 +13,7 @@ from kivy.uix.label import Label
 from kivy.uix.screenmanager import ScreenManager, Screen
 from imutils.video import WebcamVideoStream
 from camera import KivyCamera
-from auth import HEADERS
+from config import HEADERS
 import config
 
 presentation = Builder.load_file("main.kv")
@@ -21,8 +21,7 @@ presentation = Builder.load_file("main.kv")
 
 
 class ScreenManagement(ScreenManager):
-  pass
-
+    pass
 ##### HOME SCREEN #######   
 class MainScreen(Screen):
     pass
@@ -30,7 +29,10 @@ class MainScreen(Screen):
 ##### PARCEL LOADING SCREEN #######
 class LoadScreen(Screen):
   def load_scanner(self, **kwargs):
-    self.ids.scanner.start(mode="load", capture=capture)
+    captured = App.get_running_app().check_capture()
+    if captured: 
+      self.ids.scanner.start(mode="load", capture=capture)
+        
     
   def exit_scan(self):
     self.ids.scanner.stop()
@@ -72,14 +74,18 @@ class LoginScreen(Screen):
 class MainApp(App):
     
     def build(self):
-        t = threading.Thread(target=self.load_websocket).start()
         self.on_capture()
         return ScreenManagement()
     
     def on_capture(self):
+        self.t = threading.Thread(target=self.load_websocket).start()
         global capture 
         capture = WebcamVideoStream(src=0).start()
-        if not capture.read().any():
+        self.check_capture()
+        
+    def check_capture(self):
+        global capture
+        if not capture:
             box = FloatLayout()
             label = Label(text="Camera not detected!", color=(0,0,0,1))
             button = Button(text="Try again", 
@@ -92,12 +98,17 @@ class MainApp(App):
                         content=box,
                         size_hint=(None, None), size=(400, 400))
             popup.open()
+            self.t.join()
+            return False
+        return True
+
 
     def on_stop(self):
         global capture
         if capture: 
             capture.stop()
             capture = None
+            self.t.join()
 
     def load_resource(self, string):
         return os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources/'+string))            

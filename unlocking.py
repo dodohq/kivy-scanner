@@ -2,15 +2,19 @@ import gpio
 import time
 
 
-locker_to_gpio = {'L1': 466, 'L2': 397, 'L3': 255, 'L4': 398, 'L5': 298, 'L6': 389,  
-                'L7': 395, 'L8': 388, 'L9': 393, 'L10': 394, 'L11': 467, 'L12': 297} 
+locker_to_gpio = {'L1': 466, 'L2': 397, 'L3': 255, 'L4': 398, 'L5': 481, 'L6': 389,  
+                'L7': 395, 'L8': 392, 'L9': 393, 'L10': 394, 'L11': 254, 'L12': 297} 
 
 def unlock(locker):
-  pin = locker_to_gpio[locker]
+  print('unlocked '+locker)
+  # pin = locker_to_gpio[locker]
+  pin = locker
   gpio.setup(pin, gpio.OUT)
   gpio.output(pin, 1)
-  time.sleep(5)
-  gpio.cleanup(pin)
+  time.sleep(3)
+  gpio.output(pin, 0)
+  time.sleep(3)
+  gpio.cleanup(pin) 
   return 0
   
   
@@ -20,8 +24,7 @@ class GPIO():
     pass
     
 if __name__ == "__main__": 
-  for locker, pin in locker_to_gpio.items():
+  while True:
+    pin = input("Which pin? ")
     print(pin)
-    # gpio.cleanup(int(pin)) 
-    unlock(locker)
-    print('unlocked '+locker, gpio.read(locker_to_gpio[locker]))
+    unlock(pin)
