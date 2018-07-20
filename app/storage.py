@@ -1,6 +1,7 @@
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.button import Button
+from random import randint
 import os
 import json
 import requests
@@ -30,7 +31,8 @@ class Storage():
         # get the first empty locker    
         for locker in self.lockers:
             if locker["has_parcel"] == False:
-                data = {'id': parcel_id, 'robot_compartment': locker['id']}
+                locker["server_id"] = randint(100,999)
+                data = {'id': parcel_id, 'robot_compartment': locker["server_id"]}
                 req = requests.post(config.URL+'/api/parcel/load', headers=config.HEADERS, json=data)
                 print(req)
                 if(req.status_code == requests.codes.ok):
@@ -101,6 +103,7 @@ class Storage():
                     locker = lock
                     self.lockers[index]['parcel_id'] = ''
                     self.lockers[index]['has_parcel'] = False
+                    self.lockers[index]['server_id'] = ''
             except KeyError:
                 pass
         self.write_to_store()
@@ -117,3 +120,16 @@ class Storage():
         with open(self.lockers_path, 'w') as f:
             f.write(json.dumps({"lockers": self.lockers}, indent=2, sort_keys=True))
     
+    def manual_unlock(self, input):
+        server_id = input[:2]
+        password = input[3:]
+        with open(self.lockers_path) as f:
+            self.lockers = json.load(f)['lockers']
+        try: 
+            for l in self.lockers:
+                if l['server_id'] == server_id:
+                return self.unlock_parcel(l['parcel_id'])  
+            return False
+        except KeyError: 
+            pass
+

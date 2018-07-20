@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import time
 import requests
 import subprocess
 import threading
@@ -14,6 +15,7 @@ from kivy.uix.button import Button
 from kivy.uix.screenmanager import ScreenManager, Screen
 from imutils.video import WebcamVideoStream
 from camera import KivyCamera
+from storage import Storage
 import config
 
 presentation = Builder.load_file("main.kv")
@@ -22,13 +24,14 @@ presentation = Builder.load_file("main.kv")
 
 class ScreenManagement(ScreenManager):
     pass
-##### HOME SCREEN #######   
+
+##### WAREHOUSE SCREEN #######   
 class MainScreen(Screen):
     pass
 
 ##### PARCEL LOADING SCREEN #######
 class LoadScreen(Screen):
-  def load_scanner(self, **kwargs):
+  def on_enter(self, **kwargs):
     captured = App.get_running_app().check_capture()
     if captured: 
       self.ids.scanner.start(mode="load", capture=capture)
@@ -45,36 +48,40 @@ class LoadScreen(Screen):
     
 ##### UNLOCKING LOCKER SCREEN #######  
 class UnlockScreen(Screen):
-  def on_enter(self):
-    self.ids.scanner.start(mode="unlock", capture=capture)
+    def on_enter(self):
+        start = time.time()
+        captured = App.get_running_app().check_capture()
+        if captured: 
+            self.ids.scanner.start(mode="unlock", capture=capture)
+            self.timer = threading.Timer(120.0, self.exit_scan).start()
 
-  def exit_scan(self):
-    self.ids.scanner.stop()
-    self.manager.current = "main" 
-    print("exit scanner called")
+    def exit_scan(self):
+        try: 
+            self.timer.cancel()
+        except AttributeError:
+            pass
+        self.ids.scanner.stop()
+        self.manager.current = "rest" 
 
 
-##### UNLOCK LOGIN SCREEN #######
-class LoginScreen(Screen):
-    def unlock(self, id, password):
-        data = {"id" : id, "password": password}
-        res = requests.post(config.URL+'/api/parcel/unlock', json=data, headers=config.HEADERS)
-        print(res.json)
-        if (res.status_code == requests.codes.ok):
-            Storage().get_parcel(id)
-        else: 
-            print("Server error")
-        self.manager.current = 'main'
+##### UNLOCK REST SCREEN #######
+class RestScreen(Screen):
+    pass
 
+
+##### KEYIN SCREEN #######
+class KeyinScreen(Screen):
+    def unlock(self, string):
+        unlocked = Storage().manual_unlock(string)
+        self.manager.current = 'rest'
 
   
 class MainApp(App):
-    
     def build(self):
         self.on_capture()
         return ScreenManagement()
     
-    def on_capture(self):
+    def on_capture(self, *args):
         self.t = threading.Thread(target=self.load_websocket).start()
         global capture 
         capture = WebcamVideoStream(src=0).start()
@@ -87,7 +94,7 @@ class MainApp(App):
             label = Label(text="Camera not detected!", color=(0,0,0,1))
             button = Button(text="Try again", 
                     pos_hint={'center_x':0.5, 'center_y':0.3})
-            button.bind(on_press=self.on_capture())
+            button.bind(on_press=self.on_capture)
             box.add_widget(label)
             box.add_widget(button)
             
@@ -111,7 +118,7 @@ class MainApp(App):
         return os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources/'+string))            
   
     def load_websocket(self):
-        print("loading websocket")
+        # print("loading websocket")
         path = os.path.abspath(os.path.dirname(__file__))
 
         try:

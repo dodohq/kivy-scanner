@@ -4,11 +4,13 @@
 <ScreenManagement>: 
     MainScreen:
 
-    LoginScreen:
+    KeyinScreen:
    
     LoadScreen:
         
     UnlockScreen:
+
+    RestScreen: 
         
 	
 <MainScreen>:
@@ -73,35 +75,35 @@
             padding: 10
             spacing: 100
             RoundedButton: 
-                text: 'Start Scanning'
-                on_press: root.load_scanner()
-            RoundedButton: 
                 text: 'End scanning'
                 on_release: root.exit_scan()
 
-<LoginScreen>:
-    name: 'login'
-    BoxLayout:
-        text: "Unlock your parcel"
-        orientation: 'vertical'
-        padding: 140
-        spacing: 10
+<KeyinScreen>:
+    name: 'keyin'
+    FloatLayout:
+        RoundedLabel:
+            text: "Check your SMS for a 9-digit number"
+            size_hint: (.7, .1)
+            pos_hint: {'center_x': .5, 'center_y': .9}
         TextInput: 
+            size_hint: (.5, .1)
+            pos_hint: {'center_x': .5, 'center_y': .6}
             id: id
-            hint_text: "Parcel ID"
+            input_type: 'number'
+            hint_text: "Enter here"
             multiline: False
-            write_tab: False
-        TextInput:
-            id: password
-            hint_text: "Password"
-            multiline: False
-            password: True
-            write_tab: False
         RoundedButton: 
+            size_hint: (.3, .1)
+            pos_hint: {'center_x': .5, 'center_y': .4}
             border: 30,30,30,30
             text: 'Unlock'
-            font_size: 30
-            on_press: root.unlock(id.text, password.text)
+            font_size: 18
+            on_press: root.unlock(id.text)
+        BorderlessButton: 
+            size_hint: 0.2, 0.1
+            pos_hint: {'center_x': .9, 'center_y': .2}
+            text: 'Back to home'
+            on_press: root.exit_scan()
         
 
 <UnlockScreen>:
@@ -116,13 +118,48 @@
         KivyCamera:
             id: scanner
             size_hint: 1, 0.7
-        BoxLayout: 
+        FloatLayout:
             size_hint: 1, 0.2
-            padding: 10
-            spacing: 40
             RoundedButton: 
+                size_hint: 0.5, 0.7
+                pos_hint: {'center_x': .5, 'center_y': .6}
                 text: 'Can\'t scan? Input the details from your SMS!'
-                on_press: root.manager.current = 'login'
+                on_press: root.manager.current = 'keyin'
+            BorderlessButton: 
+                size_hint: 0.5, 0.2
+                pos_hint: {'center_x': .9, 'center_y': .1}
+                text: 'Back to home'
+                on_press: root.exit_scan()
+
+<RestScreen>:
+    name: 'rest'
+    canvas.before:
+        Rectangle: 
+            pos: self.pos
+            size: self.size
+            source: app.load_resource('background.png')
+
+    FloatLayout: 
+        Image: 
+            size_hint: (.2, .2)
+            pos_hint: {'center_x': .5, 'center_y': .8}
+            source: app.load_resource('logo.png')
+        RoundedButton:
+            on_press: root.manager.current = 'unlock'
+            size_hint: (.3, .3)
+            pos_hint: {'center_x': .5, 'center_y': .4}
+            Label: 
+                text: 'Unlock your parcel!'
+                color: 0,0,0,1
+                x: self.parent.x + 70
+                y: self.parent.y 
+            Image: 
+                source: app.load_resource('padlock.png')
+                width: 50
+                allow_stretch: True
+                pos: self.parent.x + 35, self.parent.height + 85
+            
+
                 
 
 <RoundedLabel@Label>:
@@ -138,6 +175,10 @@
 <RoundedButton@Button>:
     background_normal: app.load_resource('buttonnorm.png')
     background_down: app.load_resource('buttondown.png')
+
+<BorderlessButton@Button>:
+    background_color: 0,0,0,0
+    color: 1,.6,0,1
 
 <Popup>:
     title_color: 1,.6,0,1

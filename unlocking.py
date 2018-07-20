@@ -2,8 +2,8 @@ import gpio
 import time
 
 
-locker_to_gpio = {'L1': 466, 'L2': 397, 'L3': 255, 'L4': 398, 'L5': 481, 'L6': 389,  
-                'L7': 395, 'L8': 392, 'L9': 393, 'L10': 394, 'L11': 254, 'L12': 297} 
+locker_to_gpio = {'L1': 466, 'L2': 397, 'L3': 255, 'L4': 398, 'L5': 389, 'L6': 395,  
+                'L7': 393, 'L8': 394, 'L9': 297, 'L10': 254, 'L11': 481, 'L12': 392} 
 
 def unlock(locker):
   print('unlocked '+locker)

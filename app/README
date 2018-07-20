@@ -1,0 +1,7 @@
+Things to implement 
+
+1. End loading button
+2. Loading - start scanning removed 
+3. Unlock mode - implement pin pad, user to enter 9 digits 
+    - a concat of randomly generated 3 digit locker id & user password
+4. Unlock mode to be able to go back to load via user login

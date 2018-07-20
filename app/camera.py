@@ -68,43 +68,45 @@ class KivyCamera(Image):
         return im
             
     def listening(self, dt):
-        print("listen thread called")
-        # try:
-        if (code and self.mode=="load"):
-            result = self.store.load_parcel(code)
-            if result == "Filled":
-                self.parent.parent.go_to_unlock()
-            
-        elif (code and self.mode=="unlock"):
-            got_code = self.store.unlock_parcel(code)
-            self.t.join()
-            self.parent.parent.exit_scan()
+        try:
+            if (code and self.mode=="load"):
+                result = self.store.load_parcel(code)
+                if result == "Filled":
+                    self.parent.parent.go_to_unlock()
+                
+            elif (code and self.mode=="unlock"):
+                got_code = self.store.unlock_parcel(code)
+                self.t.join()
+                self.parent.parent.exit_scan()
 
-        # except ValueError as e:
-        #     Clock.unschedule(self.listening)
-        #     box = FloatLayout()
-        #     box.add_widget(Label(text="""Something went wrong with the server.
-        #             \nThe parcel failed to load into the robot.""",
-        #             pos_hint={'center_x': 0.5, 'center_y': 0.5},
-        #             color=(0,0,0,1)))
-        #     button = RoundedButton(text="Try again!",
-        #             pos_hint={'center_x': 0.5, 'center_y': 0.4},
-        #             size_hint=(0.3, 0.1), 
-        #             color=(0,0,0,1))
-        #     button.bind(on_press=self.restart_listening)
-        #     box.add_widget(button)
-        #     popup = Popup(title="Error",
-        #             content=box,
-        #             size_hint=(None, None), size=(400, 400))
-        #     popup.open()
-        #     print("caught error, ", e.args)
+        except ValueError as e:
+            Clock.unschedule(self.listening)
+            box = FloatLayout()
+            box.add_widget(Label(text="""Something went wrong with the server.
+                    \nThe parcel failed to load into the robot.""",
+                    pos_hint={'center_x': 0.5, 'center_y': 0.5},
+                    color=(0,0,0,1)))
+            button = RoundedButton(text="Try again!",
+                    pos_hint={'center_x': 0.5, 'center_y': 0.3},
+                    size_hint=(0.3, 0.15), 
+                    color=(0,0,0,1))
+            button.bind(on_press=lambda *args: self.restart_listening(popup))
+            box.add_widget(button)
+            popup = Popup(title="Error",
+                    content=box,
+                    size_hint=(None, None), size=(400, 400))
+            popup.open()
+            print("caught error, ", e.args)
        
-    def restart_listening(self, **kwargs):
-        time.sleep(5)
+    def restart_listening(self, popup):
+        global code
+        code = ''
+        popup.dismiss()
         Clock.schedule_interval(self.listening, 1)
 
     def listen_thread(self, **kwargs):
-        Clock.schedule_interval(self.listening, 2)
+        print("listen thread called")
+        Clock.schedule_interval(self.listening, 1)
             
 
 class RoundedButton(Button):
