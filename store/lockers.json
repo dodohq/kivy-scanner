@@ -3,17 +3,20 @@
     {
       "has_parcel": true,
       "id": "L1",
-      "parcel_id": "5b507882fef71c001418c333"
+      "parcel_id": "5b507882fef71c001418c333",
+      "server_id": 615
     },
     {
       "has_parcel": true,
       "id": "L2",
-      "parcel_id": "5b509988b7fdb70014967366"
+      "parcel_id": "5b509988b7fdb70014967366",
+      "server_id": 856
     },
     {
       "has_parcel": true,
       "id": "L3",
-      "parcel_id": "5b509991b7fdb70014967367"
+      "parcel_id": "5b509991b7fdb70014967367",
+      "server_id": 333
     },
     {
       "has_parcel": true,
@@ -53,12 +56,14 @@
     {
       "has_parcel": false,
       "id": "L11",
-      "parcel_id": ""
+      "parcel_id": "",
+      "server_id": ""
     },
     {
-      "has_parcel": false,
+      "has_parcel": true,
       "id": "L12",
-      "parcel_id": ""
+      "parcel_id": "5b5099f5b7fdb7001496736e",
+      "server_id": 116
     }
   ]
 }

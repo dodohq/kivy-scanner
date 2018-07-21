@@ -89,9 +89,10 @@
             size_hint: (.5, .1)
             pos_hint: {'center_x': .5, 'center_y': .6}
             id: id
-            input_type: 'number'
-            hint_text: "Enter here"
             multiline: False
+            hint_text: "Enter here"
+            input_type: 'number'
+            focus: True
         RoundedButton: 
             size_hint: (.3, .1)
             pos_hint: {'center_x': .5, 'center_y': .4}
@@ -103,7 +104,7 @@
             size_hint: 0.2, 0.1
             pos_hint: {'center_x': .9, 'center_y': .2}
             text: 'Back to home'
-            on_press: root.exit_scan()
+            on_press: root.manager.current = 'rest'
         
 
 <UnlockScreen>:
@@ -149,15 +150,16 @@
             size_hint: (.3, .3)
             pos_hint: {'center_x': .5, 'center_y': .4}
             Label: 
-                text: 'Unlock your parcel!'
+                text: 'Unlock'
+                font_size: 20
                 color: 0,0,0,1
-                x: self.parent.x + 70
+                x: self.parent.x + 75
                 y: self.parent.y 
             Image: 
                 source: app.load_resource('padlock.png')
                 width: 50
                 allow_stretch: True
-                pos: self.parent.x + 35, self.parent.height + 85
+                pos: self.parent.x * 1.35, self.parent.height * 1.18
             
 
                 

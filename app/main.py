@@ -71,6 +71,7 @@ class RestScreen(Screen):
 
 ##### KEYIN SCREEN #######
 class KeyinScreen(Screen):
+
     def unlock(self, string):
         unlocked = Storage().manual_unlock(string)
         self.manager.current = 'rest'
