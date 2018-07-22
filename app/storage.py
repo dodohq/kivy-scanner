@@ -41,7 +41,8 @@ class Storage():
                     self.parcels.append({'id': parcel_id, 'locker': locker['id']})
                     self.write_to_store()
                     popup = Popup(title="Parcel Registered!",
-                                content=Label(text="Load parcel [color=ffb355]\'"+str(parcel_id)+"\'[/color] onto "+locker['id']+".",
+                                content=Label(text="Load parcel [color=ffb355]\'"+str(parcel_id)+
+                                            "[/color] into \n[size=35]"+' '*20+locker['id']+"[/size].",
                                 markup=True, color=(0,0,0,1)),
                                 size_hint=(None, None), size=(400, 400))
                     popup.open()
@@ -77,9 +78,14 @@ class Storage():
                         req = requests.post(config.URL+'/api/parcel/unlock', headers=config.HEADERS, json=code)
                         print(req)
                         if (req.status_code == requests.codes.ok):
-                            unlock.unlock(locker['id'])  
-                            return self.get_parcel(code['id'])
-                except KeyError:
+                            self.get_parcel(code['id'])
+                            return unlock.unlock(locker['id'])   
+                except (KeyError, FileNotFoundError) as e:
+                    popup = Popup(title="Hiccup",
+                                content=Label(text="There was a minor error, "+str(e), 
+                                color=(0,0,0,1)), 
+                                size_hint=(None, None), size=(400,400))
+                    popup.open()
                     pass
         else: 
             popup = Popup(title="Error",
@@ -107,7 +113,7 @@ class Storage():
             except KeyError:
                 pass
         self.write_to_store()
-        text = "Take your parcel from locker [color=ffb355]\'"+str(locker['id'])+"\'[/color]"
+        text = "Take locker [size=35][color=ffb355]\'"+str(locker['id'])+"\'[/color][/size]"
         popup = Popup(title="Locker unlocked!", 
                     content=Label(text=text, markup=True, color=(0,0,0,1)),
                     size_hint=(None, None), size=(400, 400))
@@ -133,3 +139,12 @@ class Storage():
         except KeyError: 
             pass
 
+
+
+    # FloatLayout:
+    #     pos_hint: {'center_x': .9, 'center_y': .9}
+    #     BorderlessButton:
+    #         on_press: root.dismiss()
+    #         size_hint: (.1, .1)
+    #         Image: 
+    #             source: app.load_resource('cancel.png')

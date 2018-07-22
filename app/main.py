@@ -68,15 +68,28 @@ class UnlockScreen(Screen):
 class RestScreen(Screen):
     pass
 
-
 ##### KEYIN SCREEN #######
 class KeyinScreen(Screen):
-
     def unlock(self, string):
         unlocked = Storage().manual_unlock(string)
         self.manager.current = 'rest'
 
-  
+##### LOGIN SCREEN #######
+class LoginScreen(Screen):
+    def login(self, username, password):
+        header = {'Content-Type': 'application/json'}
+        data= {'username': username, 'password': password}
+        req = requests.post(config.URL+'/api/user/login', headers=header, json=data)
+        print(req)
+        if (req.status_code == requests.codes.ok):
+            popup = Popup(title="Success",
+                        content=Label(text="Logged in!", font_size=18, color=(0,0,0,1)),
+                        size_hint=(None, None), size=(400, 400))
+            popup.open()
+            self.manager.current = 'main'
+
+
+
 class MainApp(App):
     def build(self):
         self.on_capture()
@@ -106,7 +119,6 @@ class MainApp(App):
             self.t.join()
             return False
         return True
-
 
     def on_stop(self):
         global capture
@@ -138,7 +150,6 @@ class MainApp(App):
                         color=(0,0,0,1) ),
                         size_hint=(None, None), size=(400, 400))
           popup.open()
-        
         self.load_websocket()
         
         

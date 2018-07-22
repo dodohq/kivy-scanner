@@ -1,10 +1,10 @@
 {
   "lockers": [
     {
-      "has_parcel": true,
+      "has_parcel": false,
       "id": "L1",
-      "parcel_id": "5b507882fef71c001418c333",
-      "server_id": 615
+      "parcel_id": "",
+      "server_id": ""
     },
     {
       "has_parcel": true,
@@ -54,10 +54,10 @@
       "parcel_id": "5b509e8fb7fdb70014967371"
     },
     {
-      "has_parcel": false,
+      "has_parcel": true,
       "id": "L11",
-      "parcel_id": "",
-      "server_id": ""
+      "parcel_id": "5b509a01b7fdb7001496736f",
+      "server_id": 153
     },
     {
       "has_parcel": true,

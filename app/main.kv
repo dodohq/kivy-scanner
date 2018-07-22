@@ -3,14 +3,11 @@
 
 <ScreenManagement>: 
     MainScreen:
-
     KeyinScreen:
-   
     LoadScreen:
-        
     UnlockScreen:
-
     RestScreen: 
+    LoginScreen:
         
 	
 <MainScreen>:
@@ -60,23 +57,21 @@
 
 <LoadScreen>:
     name: 'load'
-    BoxLayout:
-        orientation: 'vertical'
-        padding: 10
+    FloatLayout:
+        KivyCamera:
+            id: scanner
+            size_hint: 1, 1
         RoundedLabel: 
             text: 'Load your parcels'
             font_size: 20
-            size_hint: 1, 0.1
-        KivyCamera:
-            id: scanner
-            size_hint: 1, 0.7
-        BoxLayout: 
-            size_hint: 1, 0.2
-            padding: 10
-            spacing: 100
-            RoundedButton: 
-                text: 'End scanning'
-                on_release: root.exit_scan()
+            size_hint: (.5, .07)
+            pos_hint: {'center_x': .5, 'center_y': .94}
+        RoundedButton: 
+            size_hint: (.3, .1)
+            pos_hint: {'center_x': .5, 'center_y': .08}
+            text: 'End loading'
+            color: 1,.6,0,1
+            on_release: root.exit_scan()
 
 <KeyinScreen>:
     name: 'keyin'
@@ -103,34 +98,32 @@
         BorderlessButton: 
             size_hint: 0.2, 0.1
             pos_hint: {'center_x': .9, 'center_y': .2}
-            text: 'Back to home'
-            on_press: root.manager.current = 'rest'
+            text: 'Back'
+            on_press: root.manager.current = 'unlock'
         
 
 <UnlockScreen>:
     name: 'unlock'
-    BoxLayout:
-        orientation: 'vertical'
-        padding: 10
-        RoundedLabel: 
-            text: 'Scan the QR code in the SMS you received to unlock your parcel!'
-            font_size: 15
-            size_hint: 1, 0.1
+    FloatLayout:
         KivyCamera:
             id: scanner
-            size_hint: 1, 0.7
-        FloatLayout:
-            size_hint: 1, 0.2
-            RoundedButton: 
-                size_hint: 0.5, 0.7
-                pos_hint: {'center_x': .5, 'center_y': .6}
-                text: 'Can\'t scan? Input the details from your SMS!'
-                on_press: root.manager.current = 'keyin'
-            BorderlessButton: 
-                size_hint: 0.5, 0.2
-                pos_hint: {'center_x': .9, 'center_y': .1}
-                text: 'Back to home'
-                on_press: root.exit_scan()
+            size_hint: 1, 1
+        RoundedLabel: 
+            text: 'Scan the QR code from your SMS to unlock your parcel!'
+            font_size: 17
+            size_hint: (0.7, 0.1)
+            pos_hint: {'center_x': .5, 'center_y': .94}
+        RoundedButton: 
+            size_hint: (.6, .1)
+            pos_hint: {'center_x': .5, 'center_y': .06}
+            text: 'Can\'t scan? Input the details from your SMS!'
+            color: 0,0,0,1
+            on_press: root.manager.current = 'keyin'
+        BorderlessButton: 
+            size_hint: 0.5, 0.2
+            pos_hint: {'center_x': .9, 'center_y': .1}
+            text: 'Back to home'
+            on_press: root.exit_scan()
 
 <RestScreen>:
     name: 'rest'
@@ -160,8 +153,61 @@
                 width: 50
                 allow_stretch: True
                 pos: self.parent.x * 1.35, self.parent.height * 1.18
-            
+        BorderlessButton:
+            text: "[u]Login as admin[/u]" 
+            size_hint: (.3, .1)
+            pos_hint: {'center_x': .1, 'center_y': .1}
+            on_press: root.manager.current = 'login'
 
+            
+<LoginScreen>:
+    name: 'login'
+    canvas.before:
+        Rectangle: 
+            pos: self.pos
+            size: self.size
+            source: app.load_resource('background.png')
+    FloatLayout:
+        RoundedLabel:
+            text: "Login for admin access"
+            size_hint: (.7, .1)
+            pos_hint: {'center_x': .5, 'center_y': .9}
+        Label: 
+            text: "Username: "
+            pos_hint: {'center_x': .3, 'center_y': .7}
+            color: 0,0,0,1
+        TextInput: 
+            size_hint: (.4, .1)
+            pos_hint: {'center_x': .55, 'center_y': .7}
+            id: username
+            input_type: 'text'
+            multiline: False
+        Label: 
+            text: "Password: "
+            pos_hint: {'center_x': .3, 'center_y': .5}
+            color: 0,0,0,1
+        TextInput: 
+            size_hint: (.4, .1)
+            pos_hint: {'center_x': .55, 'center_y': .5}
+            id: password
+            input_type: 'text'
+            multiline: False
+        RoundedButton: 
+            size_hint: (.3, .1)
+            pos_hint: {'center_x': .5, 'center_y': .3}
+            border: 30,30,30,30
+            text: 'Login'
+            font_size: 18
+            color: 1,.6,0,1
+            on_press: root.login(username.text, password.text)
+        BorderlessButton: 
+            size_hint: 0.2, 0.1
+            pos_hint: {'center_x': .22, 'center_y': .2}
+            text: '[u]Back to home[/u]'
+            on_press: root.manager.current = 'rest'
+            Image:
+                pos_hint: {'center_x': .2, 'center_y': .2}
+                source: app.load_resource('back.png')
                 
 
 <RoundedLabel@Label>:
@@ -177,13 +223,17 @@
 <RoundedButton@Button>:
     background_normal: app.load_resource('buttonnorm.png')
     background_down: app.load_resource('buttondown.png')
+    font_size: 18
 
 <BorderlessButton@Button>:
     background_color: 0,0,0,0
     color: 1,.6,0,1
+    markup: True
+    font_size: 17
 
 <Popup>:
     title_color: 1,.6,0,1
-    title_size: 17
+    title_size: 20
     title_align: 'center'
     background: app.load_resource('popup.png')
+
