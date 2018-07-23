@@ -13,10 +13,12 @@ from kivy.uix.popup import Popup
 from kivy.uix.image import Image 
 from kivy.uix.label import Label
 from kivy.uix.button import Button
+from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import ScreenManager, Screen
 from imutils.video import WebcamVideoStream
 from camera import KivyCamera
 from storage import Storage
+from keyboard import Keyboard
 import config
 
 presentation = Builder.load_file("main.kv")
@@ -73,9 +75,23 @@ class RestScreen(Screen):
 
 ##### KEYIN SCREEN #######
 class KeyinScreen(Screen):
+    def on_enter(self):
+        self.txt = TextInput(size_hint=(.5, .1),
+            pos_hint={'center_x': .5, 'center_y': .6},
+            id="id",
+            keyboard_mode='managed')
+        self.txt.bind(focus=self.on_focus)
+        self.add_widget(self.txt)
+
+
+    def on_focus(self, instance, value):
+        kb = Keyboard("number", self.txt)
+        return False
+
     def unlock(self, string):
         unlocked = Storage().manual_unlock(string)
         self.manager.current = 'rest'
+
 
 ##### LOGIN SCREEN #######
 class LoginScreen(Screen):
