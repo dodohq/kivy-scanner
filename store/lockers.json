@@ -13,25 +13,28 @@
       "server_id": ""
     },
     {
-      "has_parcel": true,
+      "has_parcel": false,
       "id": "L3",
-      "parcel_id": "5b509991b7fdb70014967367",
-      "server_id": 333
+      "parcel_id": "",
+      "server_id": ""
     },
     {
-      "has_parcel": true,
+      "has_parcel": false,
       "id": "L4",
-      "parcel_id": "5b5099b3b7fdb70014967368"
+      "parcel_id": "",
+      "server_id": ""
     },
     {
-      "has_parcel": true,
+      "has_parcel": false,
       "id": "L5",
-      "parcel_id": "5b5099c0b7fdb70014967369"
+      "parcel_id": "",
+      "server_id": ""
     },
     {
-      "has_parcel": true,
+      "has_parcel": false,
       "id": "L6",
-      "parcel_id": "5b5099cbb7fdb7001496736a"
+      "parcel_id": "",
+      "server_id": ""
     },
     {
       "has_parcel": false,
@@ -40,19 +43,22 @@
       "server_id": ""
     },
     {
-      "has_parcel": true,
+      "has_parcel": false,
       "id": "L8",
-      "parcel_id": "5b5099e2b7fdb7001496736c"
+      "parcel_id": "",
+      "server_id": ""
     },
     {
-      "has_parcel": true,
+      "has_parcel": false,
       "id": "L9",
-      "parcel_id": "5b5099ecb7fdb7001496736d"
+      "parcel_id": "",
+      "server_id": ""
     },
     {
-      "has_parcel": true,
+      "has_parcel": false,
       "id": "L10",
-      "parcel_id": "5b509e8fb7fdb70014967371"
+      "parcel_id": "",
+      "server_id": ""
     },
     {
       "has_parcel": false,
@@ -61,10 +67,10 @@
       "server_id": ""
     },
     {
-      "has_parcel": true,
+      "has_parcel": false,
       "id": "L12",
-      "parcel_id": "5b5099f5b7fdb7001496736e",
-      "server_id": 116
+      "parcel_id": "",
+      "server_id": ""
     }
   ]
 }

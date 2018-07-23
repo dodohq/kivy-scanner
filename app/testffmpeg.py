@@ -59,6 +59,7 @@ def on_close(ws):
 
 
 def on_open(ws):
+    raise ValueError('test')
     print('### opened ###')
     def run(*args):
         while True:

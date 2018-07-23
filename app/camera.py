@@ -65,7 +65,7 @@ class KivyCamera(Image):
           points = decodedObject.polygon  
           if len(points) == 4 : 
             cv2.rectangle(im, (points[0].x, points[0].y), (points[2].x, points[2].y), (0,255,0), 3)
-        cv2.rectangle(im, (200,100), (1100, 600), (255,255,255), 8)
+        cv2.rectangle(im, (100, 380), (550, 100), (255,255,255), 8)
         return im
             
     def listening(self, dt):
@@ -84,12 +84,12 @@ class KivyCamera(Image):
             Clock.unschedule(self.listening)
             box = FloatLayout()
             box.add_widget(Label(text="""Something went wrong with the server.
-                    \nThe parcel failed to load into the robot.""",
-                    pos_hint={'center_x': 0.5, 'center_y': 0.5},
+                    \nThe parcel failed to load into the robot.""", font_size=17,
+                    pos_hint={'center_x': 0.5, 'center_y': 0.7},
                     color=(0,0,0,1)))
             button = RoundedButton(text="Try again!",
                     pos_hint={'center_x': 0.5, 'center_y': 0.3},
-                    size_hint=(0.3, 0.15), 
+                    size_hint=(0.3, 0.2), 
                     color=(0,0,0,1))
             button.bind(on_press=lambda *args: self.restart_listening(popup))
             box.add_widget(button)

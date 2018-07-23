@@ -14,6 +14,7 @@ from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import ScreenManager, Screen
 from imutils.video import WebcamVideoStream
 from camera import KivyCamera
@@ -22,9 +23,9 @@ from keyboard import Keyboard
 import config
 
 presentation = Builder.load_file("main.kv")
-# Config.set('graphics', 'resizeable', '0')
-Config.set('graphics', 'width', '800')
-Config.set('graphics', 'height', '480')
+Config.set('graphics', 'resizeable', '0')
+#Config.set('graphics', 'width', '800')
+#Config.set('graphics', 'height', '480')
 
 
 class ScreenManagement(ScreenManager):
@@ -82,9 +83,12 @@ class KeyinScreen(Screen):
             keyboard_mode='managed')
         self.txt.bind(focus=self.on_focus)
         self.add_widget(self.txt)
-
+        
+        
+        
 
     def on_focus(self, instance, value):
+        print(instance, value)
         kb = Keyboard("number", self.txt)
         return False
 
@@ -107,7 +111,8 @@ class LoginScreen(Screen):
             popup.open()
             self.manager.current = 'main'
 
-
+class RoundedButton(Button):
+    pass
 
 class MainApp(App):
     def build(self):
@@ -165,7 +170,7 @@ class MainApp(App):
                         content=Label(text="""Internal Websocket Error:
                         \nThe robot couldn't connect to the websocket.
                         \nTrying again..\n""",
-                        color=(0,0,0,1) ),
+                        color=(0,0,0,1), font_size=17, pos_hint={'center_x':.5, 'center_y':.6} ),
                         size_hint=(None, None), size=(400, 400))
           popup.open()
         self.load_websocket()

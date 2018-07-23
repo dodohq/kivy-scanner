@@ -46,23 +46,20 @@ class Storage():
                     locker['has_parcel'] = True
                     self.parcels.append({'id': parcel_id, 'locker': locker['id']})
                     self.write_to_store()
+                    label = Label(text="Load parcel into \n[size=55][color=ffb355]"+' '*6+locker['id'].strip('L')+"[/color][/size]", pos_hint={'center_x':.5, 'center_y':.6},
+                                markup=True, color=(0,0,0,1))
                     popup = Popup(title="Parcel Registered!",
-                                content=Label(text="Load parcel \n"+' '*10+str(parcel_id)+
-                                            " into \n[size=55][color=ffb355]"+' '*10+locker['id']+"[/color][/size].",
-                                markup=True, color=(0,0,0,1)),
+                                content=label,
                                 size_hint=(None, None), size=(400, 400))
                     popup.open()
                     # check if all lockers are filled 
                     if all(l['has_parcel']==True for l in self.lockers):
                         box = FloatLayout()
-                        box.add_widget(Label(text="All the lockers are filled! Do you want to finish loading?",
-                                            pos_hint={'center_x':0.5, 'center_y':0.7},
-                                            font_size=18))
-                        box.add_widget(Button(text="Finish",
-                                            pos_hint={'center_x':0.5, 'center_y':0.4}))
-                        popup = Popup(title="Finished!",
-                                    content=box, color=(0,0,0,1),
-                                    size_hint=(None, None), size=(400, 400))
+                        box.add_widget(Label(text="All the lockers are filled!\nDo you want to finish loading?", pos_hint={'center_x':0.5, 'center_y':0.7}, font_size=18, color=(0,0,0,1)))
+                        btn = RoundedButton(text="Finish", pos_hint={'center_x':0.5, 'center_y':0.4}, size_hint=(0.45, 0.2), color=(0,0,0,1))
+                        btn.bind(on_press=root.go_to_unlock)
+                        box.add_widget(btn)
+                        popup = Popup(title="Finished!", content=box, size_hint=(None, None), size=(400, 400))
                         popup.open()
                         return "Filled"
                     return True
@@ -92,8 +89,8 @@ class Storage():
                             return unlock.unlock(locker['id'])   
                 except (KeyError, FileNotFoundError) as e:
                     popup = Popup(title="Hiccup",
-                                content=Label(text="There was a minor error, "+str(e), 
-                                color=(0,0,0,1), font_size=18), 
+                                content=Label(text="There was a minor error:\n "+str(e), 
+                                color=(0,0,0,1), font_size=18, pos_hint={'center_x':.5, 'center_y':.6}), 
                                 size_hint=(None, None), size=(400,400))
                     popup.open()
                     pass
@@ -103,9 +100,10 @@ class Storage():
                         \nCheck your robot location again, or 
                         \ncall our helpline at 96959382.""",
                         font_size=18,
-                        color=(0,0,0,1) ),
+                        color=(0,0,0,1),pos_hint={'center_x':.5, 'center_y':.6} ),
                         size_hint=(None, None), size=(400, 400))
             popup.open()
+
             return False
 
 
@@ -124,7 +122,7 @@ class Storage():
             except KeyError:
                 pass
         self.write_to_store()
-        text = "Open locker [size=45][color=ffb355]\'"+str(locker['id'])+"\'[/color][/size]"
+        text = "Open locker\n"+" "*8+"[size=65][color=ffb355]"+locker['id'].strip('L')+"[/color][/size]"
         popup = Popup(title="Locker unlocked!", 
                     content=Label(text=text, markup=True, color=(0,0,0,1)),
                     size_hint=(None, None), size=(400, 400))
@@ -146,14 +144,15 @@ class Storage():
             try: 
                 for l in self.lockers:
                     if l['server_id'] == server_id:
-                        code = {'id': l['parcel_id'], 'password': password}
+                        code = {'robot_compartment': server_id, 'password': password}
                         return self.unlock_parcel(code)  
                 return False
             except KeyError: 
                 pass
         else: 
+            print("user submitted empty input")
             popup = Popup(title="Empty input!", 
-                    content=Label(text="Please input the 9-digit number in your SMS.", color=(0,0,0,1)),
+                    content=Label(text="Please input the 9-digit\n` number in your SMS.", color=(0,0,0,1)),
                     size_hint=(None, None), size=(400, 400))
             popup.open()
 
