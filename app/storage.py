@@ -1,3 +1,4 @@
+from kivy.app import App
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.button import Button
@@ -5,6 +6,7 @@ from random import randint
 import os
 import json
 import requests
+import threading
 import config
 import unlock
 
@@ -16,6 +18,7 @@ class Storage():
         self.parcels_path =  STORE_DIR + "/parcels.json"
         with open(self.parcels_path) as f:
             self.parcels = json.load(f)['parcels']
+        self.popup = App.get_running_app().loading()
         
     def load_parcel(self, parcel_id):
         print('loading parcel')
@@ -33,57 +36,64 @@ class Storage():
             if locker["has_parcel"] == False:
                 locker["server_id"] = randint(100,999)
                 data = {'id': parcel_id, 'robot_compartment': locker["server_id"]}
-                req = requests.post(config.URL+'/api/parcel/load', headers=config.HEADERS, json=data)
-                print(req)
-                if(req.status_code == requests.codes.ok):
+                self.popup.open()
+                self.req = requests.post(config.URL+'/api/parcel/load', headers=config.HEADERS, json=data)
+                print(self.req)
+                if(self.req.status_code == requests.codes.ok):
+                    self.popup.dismiss()
+                    unlock.unlock(locker['id']) 
                     locker['parcel_id'] = parcel_id
                     locker['has_parcel'] = True
                     self.parcels.append({'id': parcel_id, 'locker': locker['id']})
                     self.write_to_store()
                     popup = Popup(title="Parcel Registered!",
-                                content=Label(text="Load parcel [color=ffb355]\'"+str(parcel_id)+
-                                            "[/color] into \n[size=35]"+' '*20+locker['id']+"[/size].",
+                                content=Label(text="Load parcel \n"+' '*10+str(parcel_id)+
+                                            " into \n[size=55][color=ffb355]"+' '*10+locker['id']+"[/color][/size].",
                                 markup=True, color=(0,0,0,1)),
                                 size_hint=(None, None), size=(400, 400))
                     popup.open()
+                    # check if all lockers are filled 
+                    if all(l['has_parcel']==True for l in self.lockers):
+                        box = FloatLayout()
+                        box.add_widget(Label(text="All the lockers are filled! Do you want to finish loading?",
+                                            pos_hint={'center_x':0.5, 'center_y':0.7},
+                                            font_size=18))
+                        box.add_widget(Button(text="Finish",
+                                            pos_hint={'center_x':0.5, 'center_y':0.4}))
+                        popup = Popup(title="Finished!",
+                                    content=box, color=(0,0,0,1),
+                                    size_hint=(None, None), size=(400, 400))
+                        popup.open()
+                        return "Filled"
                     return True
                 else: 
                     raise ValueError(req.json())
                     return False
 
 
-        # check if all lockers are filled 
-        if all(l['has_parcel']==True for l in self.lockers):
-            box = FloatLayout()
-            box.add_widget(Label(text="All the lockers are filled! Do you want to finish loading?",
-                                pos_hint={'center_x':0.5, 'center_y':0.7}))
-            box.add_widget(Button(text="Finish",
-                                pos_hint={'center_x':0.5, 'center_y':0.4}))
-            popup = Popup(title="Finished!",
-                        content=box, color=(0,0,0,1),
-                        size_hint=(None, None), size=(400, 400))
-            popup.open()
-            return "Filled"
-
-
     def unlock_parcel(self, code):
-        print(code)
         code = json.loads(code)
-        if code['id'] in [p['id'] for p in self.parcels]:
+        parcel_id = code['id']
+        del code['id']
+        if parcel_id in [p['id'] for p in self.parcels]:
             with open(self.lockers_path) as f:
                 self.lockers = json.load(f)['lockers']
             for locker in self.lockers:
                 try: 
-                    if locker['parcel_id'] == code['id']:
+                    if locker['parcel_id'] == parcel_id:
+                        code['robot_compartment'] = locker['server_id']
+                        print('unlock', code)
+                        self.popup.open()
                         req = requests.post(config.URL+'/api/parcel/unlock', headers=config.HEADERS, json=code)
                         print(req)
                         if (req.status_code == requests.codes.ok):
-                            self.get_parcel(code['id'])
+                            self.popup.dismiss()
+                            self.get_parcel(parcel_id)
                             return unlock.unlock(locker['id'])   
                 except (KeyError, FileNotFoundError) as e:
                     popup = Popup(title="Hiccup",
                                 content=Label(text="There was a minor error, "+str(e), 
-                                color=(0,0,0,1)), 
+                                color=(0,0,0,1), font_size=18), 
                                 size_hint=(None, None), size=(400,400))
                     popup.open()
                     pass
@@ -92,6 +102,7 @@ class Storage():
                         content=Label(text="""This robot doesn't have your parcel.
                         \nCheck your robot location again, or 
                         \ncall our helpline at 96959382.""",
+                        font_size=18,
                         color=(0,0,0,1) ),
                         size_hint=(None, None), size=(400, 400))
             popup.open()
@@ -113,7 +124,7 @@ class Storage():
             except KeyError:
                 pass
         self.write_to_store()
-        text = "Take locker [size=35][color=ffb355]\'"+str(locker['id'])+"\'[/color][/size]"
+        text = "Open locker [size=45][color=ffb355]\'"+str(locker['id'])+"\'[/color][/size]"
         popup = Popup(title="Locker unlocked!", 
                     content=Label(text=text, markup=True, color=(0,0,0,1)),
                     size_hint=(None, None), size=(400, 400))
@@ -127,19 +138,24 @@ class Storage():
             f.write(json.dumps({"lockers": self.lockers}, indent=2, sort_keys=True))
     
     def manual_unlock(self, input):
-        server_id = input[:2]
-        password = input[3:]
-        with open(self.lockers_path) as f:
-            self.lockers = json.load(f)['lockers']
-        try: 
-            for l in self.lockers:
-                if l['server_id'] == server_id:
-                    return self.unlock_parcel(l['parcel_id'])  
-            return False
-        except KeyError: 
-            pass
-
-
+        if input: 
+            server_id = input[:2]
+            password = input[3:]
+            with open(self.lockers_path) as f:
+                self.lockers = json.load(f)['lockers']
+            try: 
+                for l in self.lockers:
+                    if l['server_id'] == server_id:
+                        code = {'id': l['parcel_id'], 'password': password}
+                        return self.unlock_parcel(code)  
+                return False
+            except KeyError: 
+                pass
+        else: 
+            popup = Popup(title="Empty input!", 
+                    content=Label(text="Please input the 9-digit number in your SMS.", color=(0,0,0,1)),
+                    size_hint=(None, None), size=(400, 400))
+            popup.open()
 
     # FloatLayout:
     #     pos_hint: {'center_x': .9, 'center_y': .9}

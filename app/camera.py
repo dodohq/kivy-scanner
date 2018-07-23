@@ -65,6 +65,7 @@ class KivyCamera(Image):
           points = decodedObject.polygon  
           if len(points) == 4 : 
             cv2.rectangle(im, (points[0].x, points[0].y), (points[2].x, points[2].y), (0,255,0), 3)
+        cv2.rectangle(im, (200,100), (1100, 600), (255,255,255), 8)
         return im
             
     def listening(self, dt):

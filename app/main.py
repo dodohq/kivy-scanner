@@ -10,6 +10,7 @@ from kivy.lang import Builder
 from kivy.config import Config
 from kivy.uix.widget import Widget
 from kivy.uix.popup import Popup
+from kivy.uix.image import Image 
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.screenmanager import ScreenManager, Screen
@@ -20,6 +21,8 @@ import config
 
 presentation = Builder.load_file("main.kv")
 # Config.set('graphics', 'resizeable', '0')
+Config.set('graphics', 'width', '800')
+Config.set('graphics', 'height', '480')
 
 
 class ScreenManagement(ScreenManager):
@@ -31,19 +34,19 @@ class MainScreen(Screen):
 
 ##### PARCEL LOADING SCREEN #######
 class LoadScreen(Screen):
-  def on_enter(self, **kwargs):
-    captured = App.get_running_app().check_capture()
-    if captured: 
-      self.ids.scanner.start(mode="load", capture=capture)
+    def on_enter(self, **kwargs):
+        captured = App.get_running_app().check_capture()
+        if captured: 
+            self.ids.scanner.start(mode="load", capture=capture)
         
-  def exit_scan(self):
-    self.ids.scanner.stop()
-    self.manager.current = "main"
-    print("exit scanner called")
+    def exit_scan(self):
+        self.ids.scanner.stop()
+        self.manager.current = "main"
+        print("exit scanner called")
 
-  def go_to_unlock(self):
-    self.ids.scanner.stop()
-    self.manager.current = "unlock"
+    def go_to_unlock(self):
+        self.ids.scanner.stop()
+        self.manager.current = "unlock"
     
     
 ##### UNLOCKING LOCKER SCREEN #######  
@@ -151,7 +154,20 @@ class MainApp(App):
                         size_hint=(None, None), size=(400, 400))
           popup.open()
         self.load_websocket()
+    
+    def loading(self):
+        # gif_path = self.load_resource('loading.gif')
+        # print(gif_path)
+        # img = Image(source='loading.gif')
+        # print(img)
+        popup = Popup(title="Loading!", 
+                    content=Label(text="Please wait...", color=(0,0,0,1)),
+                    size_hint=(None, None), size=(400, 400))
+        return popup        
         
-        
+class GIFImg(Image):
+    def __init__(self, **kwargs):
+        super(GIFImg, self).__init__(**kwargs)
+
 if __name__ == '__main__':
     MainApp().run()

@@ -7,10 +7,10 @@
       "server_id": ""
     },
     {
-      "has_parcel": true,
+      "has_parcel": false,
       "id": "L2",
-      "parcel_id": "5b509988b7fdb70014967366",
-      "server_id": 856
+      "parcel_id": "",
+      "server_id": ""
     },
     {
       "has_parcel": true,
@@ -34,9 +34,10 @@
       "parcel_id": "5b5099cbb7fdb7001496736a"
     },
     {
-      "has_parcel": true,
+      "has_parcel": false,
       "id": "L7",
-      "parcel_id": "5b5099d8b7fdb7001496736b"
+      "parcel_id": "",
+      "server_id": ""
     },
     {
       "has_parcel": true,
@@ -54,10 +55,10 @@
       "parcel_id": "5b509e8fb7fdb70014967371"
     },
     {
-      "has_parcel": true,
+      "has_parcel": false,
       "id": "L11",
-      "parcel_id": "5b509a01b7fdb7001496736f",
-      "server_id": 153
+      "parcel_id": "",
+      "server_id": ""
     },
     {
       "has_parcel": true,

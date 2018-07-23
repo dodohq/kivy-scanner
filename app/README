@@ -5,3 +5,5 @@ Things to implement
 3. Unlock mode - implement pin pad, user to enter 9 digits 
     - a concat of randomly generated 3 digit locker id & user password
 4. Unlock mode to be able to go back to load via user login
+
+- write a script to set all pins to low on start up
