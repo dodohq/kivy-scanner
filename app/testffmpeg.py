@@ -11,9 +11,9 @@ except ImportError:
     import _thread as thread
 import time
 
-WSSERVER = 'ws://10.12.54.167:8080'
-STREAMSERVER = 'http://10.12.54.167:8080'
-TOKEN = config.ROBOT_TOKEN
+WSSERVER = 'ws://backdemo.herokuapp.com'
+STREAMSERVER = 'http://backdemo.herokuapp.com'
+TOKEN = config.HEADERS['Authorization']
 
 
 

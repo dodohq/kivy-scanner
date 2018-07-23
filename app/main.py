@@ -150,9 +150,8 @@ class MainApp(App):
         return os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources/'+string))            
   
     def load_websocket(self):
-        # print("loading websocket")
-        path = os.path.abspath(os.path.dirname(__file__))
-
+        path = os.path.abspath(os.path.dirname(__file__)) 
+        print("loading websocket", path)
         try:
           p = subprocess.Popen([sys.executable, path+'/testffmpeg.py'], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
        
@@ -181,9 +180,6 @@ class MainApp(App):
                     size_hint=(None, None), size=(400, 400))
         return popup        
         
-class GIFImg(Image):
-    def __init__(self, **kwargs):
-        super(GIFImg, self).__init__(**kwargs)
 
 if __name__ == '__main__':
     MainApp().run()
