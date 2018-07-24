@@ -1,0 +1,66 @@
+{
+    "title": "Qwerty",
+    "description": "A classical US Keyboard",
+	"cols": 15,
+    "rows": 5,
+    "normal_1": [
+        ["`", null, "`", 1],    ["1", null, "1", 1],    ["2", null, "2", 1],
+        ["3", null, "3", 1],    ["4", null, "4", 1],    ["5", null, "5", 1],
+        ["6", null, "6", 1],    ["7", null, "7", 1],    ["8", null, "8", 1],
+        ["9", null, "9", 1],    ["0", null, "0", 1],    ["-", null, "-", 1],
+        ["=", null, "=", 1],    ["\u232b", null, "backspace", 2]
+    ],
+    "normal_2" : [
+        ["\u21B9", null, "tab", 1.5],  ["q", null, "q", 1],    ["w", null, "w", 1],
+        ["e", null, "e", 1],    ["r", null, "r", 1],    ["t", null, "t", 1],
+        ["y", null, "y", 1],    ["u", null, "u", 1],    ["i", null, "i", 1],
+        ["o", null, "o", 1],    ["p", null, "p", 1],    ["[", null, "[", 1],
+        ["]", null, "j", 1],    ["\\", null, "\\", 1]
+    ],
+    "normal_3": [
+        ["\u21ea", null, "capslock", 1.8],  ["a", null, "a", 1],    ["s", null, "s", 1],
+        ["d", null, "d", 1],    ["f", null, "f", 1],    ["g", null, "g", 1],
+        ["h", null, "h", 1],    ["j", null, "j", 1],    ["k", null, "k", 1],
+        ["l", null, "l", 1],    [":", null, ":", 1],    ["'", null, "'", 1],
+        ["\u23ce", null, "enter", 2.2]
+    ],
+    "normal_4": [
+        ["\u21e7", null, "shift", 2.5],  ["z", null, null, 1],    ["x", null, "x", 1],
+        ["c", null, "c", 1],    ["v", null, "v", 1],    ["b", null, "b", 1],
+        ["n", null, "n", 1],    ["m", null, "m", 1],    [",", null, ",", 1],
+        [".", null, ".", 1],    ["/", null, "/", 1],    ["\u21e7", null, "shift", 2.5]
+    ],
+    "normal_5": [
+        [" ", null, "spacebar", 12], ["\u2b12", null, "layout", 1.5], ["\u2a2f", null, "escape", 1.5]
+    ],
+    "shift_1": [
+        ["~", null, "~", 1],    ["!", null, "!", 1],    ["@", null, "@", 1],
+        ["#", null, "#", 1],    ["$", null, "$", 1],    ["%", null, "%", 1],
+        ["^", null, null, 1],   ["&", null, "&", 1],    ["*", null, "*", 1],
+        ["(", null, "(", 1],    [")", null, ")", 1],    ["_", null, "_", 1],
+        ["+", null, "+", 1],    ["\u232b", null, "backspace", 2]
+    ],
+    "shift_2": [
+        ["\u21B9", null, "tab", 1.5],  ["Q", "Q", null, 1],    ["W", "W", null, 1],
+        ["E", null, "e", 1],    ["R", "R", "r", 1],    ["T", "T", "t", 1],
+        ["Y", null, "y", 1],    ["U", "U", "u", 1],    ["I", "I", "i", 1],
+        ["O", null, "o", 1],    ["P", "P", "p", 1],    ["{", "{", "{", 1],
+        ["}", null, "}", 1],    ["|", "|", "|", 1.5]
+    ],
+    "shift_3": [
+        ["\u21ea", null, "capslock", 1.8],  ["A", null, "a", 1],    ["S", null, "s", 1],
+        ["D", null, "d", 1],    ["F", null, "f", 1],    ["G", null, "g", 1],
+        ["H", null, "h", 1],    ["J", null, "j", 1],    ["K", null, "k", 1],
+        ["L", null, "l", 1],    [";", null, ";", 1],    ["\"", null, "\"", 1],
+        ["\u23ce", null, "enter", 2.2]
+    ],
+    "shift_4": [
+        ["\u21e7", null, "shift", 2.5],  ["Z", null, "z", 1],    ["X", null, "x", 1],
+        ["C", null, "c", 1],    ["V", null, "v", 1],    ["B", null, "b", 1],
+        ["N", null, "n", 1],    ["M", null, "m", 1],    ["<", null, "<", 1],
+        [">", null, ">", 1],    ["?", null, "?", 1.5],    ["\u21e7", null, "shift", 2.5]
+    ],
+    "shift_5": [
+        [" ", null, "spacebar", 12], ["\u2b12", null, "layout", 1.5], ["\u2a2f", null, "escape", 1.5]
+    ]
+}

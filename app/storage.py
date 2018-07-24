@@ -3,6 +3,7 @@ from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.button import Button
 from random import randint
+from popup import LoadingPopup
 import os
 import json
 import requests
@@ -18,7 +19,6 @@ class Storage():
         self.parcels_path =  STORE_DIR + "/parcels.json"
         with open(self.parcels_path) as f:
             self.parcels = json.load(f)['parcels']
-        self.popup = App.get_running_app().loading()
         
     def load_parcel(self, parcel_id):
         print('loading parcel')
@@ -34,18 +34,25 @@ class Storage():
         # get the first empty locker    
         for locker in self.lockers:
             if locker["has_parcel"] == False:
+                loader = LoadingPopup()
                 locker["server_id"] = randint(100,999)
-                data = {'id': parcel_id, 'robot_compartment': locker["server_id"]}
-                self.popup.open()
+                data = {'id': parcel_id, 'robot_compartment': locker['id'], 'uuid':locker["server_id"]}
                 self.req = requests.post(config.URL+'/api/parcel/load', headers=config.HEADERS, json=data)
                 print(self.req)
                 if(self.req.status_code == requests.codes.ok):
-                    self.popup.dismiss()
-                    unlock.unlock(locker['id']) 
-                    locker['parcel_id'] = parcel_id
-                    locker['has_parcel'] = True
-                    self.parcels.append({'id': parcel_id, 'locker': locker['id']})
-                    self.write_to_store()
+                    loader.stop_t()
+                    try:
+                        unlock.unlock(locker['id']) 
+                        locker['parcel_id'] = parcel_id
+                        locker['has_parcel'] = True
+                        self.parcels.append({'id': parcel_id, 'locker': locker['id']})
+                        self.write_to_store()
+                    except (KeyError, FileNotFoundError) as e:
+                        popup = Popup(title="Hiccup",
+                                    content=Label(text="There was a minor error:\n "+str(e), 
+                                    color=(0,0,0,1), font_size=18, pos_hint={'center_x':.5, 'center_y':.6}), 
+                                    size_hint=(None, None), size=(400,400))
+                        popup.open()
                     label = Label(text="Load parcel into \n[size=55][color=ffb355]"+' '*6+locker['id'].strip('L')+"[/color][/size]", pos_hint={'center_x':.5, 'center_y':.6},
                                 markup=True, color=(0,0,0,1))
                     popup = Popup(title="Parcel Registered!",
@@ -78,13 +85,13 @@ class Storage():
             for locker in self.lockers:
                 try: 
                     if locker['parcel_id'] == parcel_id:
-                        code['robot_compartment'] = locker['server_id']
+                        code['uuid'] = locker['server_id']
                         print('unlock', code)
-                        self.popup.open()
+                        loader = LoadingPopup()
                         req = requests.post(config.URL+'/api/parcel/unlock', headers=config.HEADERS, json=code)
                         print(req)
                         if (req.status_code == requests.codes.ok):
-                            self.popup.dismiss()
+                            loader.stop_t()
                             self.get_parcel(parcel_id)
                             return unlock.unlock(locker['id'])   
                 except (KeyError, FileNotFoundError) as e:

@@ -2,6 +2,7 @@ import cv2
 import time
 import threading
 import pyzbar.pyzbar as pyzbar 
+from kivy.app import App
 from kivy.uix.image import Image
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.button import Button
@@ -17,10 +18,11 @@ class KivyCamera(Image):
     def __init__(self, **kwargs):
         super(KivyCamera, self).__init__(**kwargs)
 
-    def start(self, mode, capture, fps=30):
+    def start(self, mode, fps=30):
         self.store = Storage()
         self.mode = mode
-        self.capture = capture
+        self.stop_subprocess()
+        self.capture = cv2.VideoCapture(0)
         global code
         code = ''
         self.t = threading.Thread(target=self.listen_thread)
@@ -32,12 +34,14 @@ class KivyCamera(Image):
             Clock.unschedule(self.update)
             Clock.unschedule(self.listening)
             self.t.join()
-            self.capture = None
+            self.capture.release()
         except AttributeError: 
             pass
 
+    def stop_subprocess(self):
+        pass
     def update(self, dt):
-        frame = self.capture.read()
+        ret, frame = self.capture.read()
         if frame.any():
             decodedObjs = self.__decode(frame)
             frame = self.__display(frame, decodedObjs)
@@ -70,8 +74,11 @@ class KivyCamera(Image):
             
     def listening(self, dt):
         try:
+            global code 
             if (code and self.mode=="load"):
                 result = self.store.load_parcel(code)
+                if result: 
+                    code = ""
                 if result == "Filled":
                     self.parent.parent.go_to_unlock()
                 

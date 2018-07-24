@@ -86,7 +86,7 @@
             border: 30,30,30,30
             text: 'Unlock'
             font_size: 25
-            on_press: root.unlock(id.text)
+            on_press: root.unlock()
         BackButton: 
             size_hint: 0.08, 0.15
             pos_hint: {'center_x': .8, 'center_y': .2}
@@ -167,22 +167,10 @@
             text: "Username:"
             pos_hint: {'center_x': .25, 'center_y': .7}
             color: 0,0,0,1
-        TextInput: 
-            size_hint: (.4, .1)
-            pos_hint: {'center_x': .6, 'center_y': .7}
-            id: username
-            input_type: 'text'
-            multiline: False
         Label: 
             text: "Password:"
             pos_hint: {'center_x': .25, 'center_y': .5}
             color: 0,0,0,1
-        TextInput: 
-            size_hint: (.4, .1)
-            pos_hint: {'center_x': .6, 'center_y': .5}
-            id: password
-            input_type: 'text'
-            multiline: False
         RoundedButton: 
             size_hint: (.3, .15)
             pos_hint: {'center_x': .5, 'center_y': .3}
