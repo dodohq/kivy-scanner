@@ -2,6 +2,7 @@ from kivy.app import App
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.button import Button
+from kivy.uix.floatlayout import FloatLayout
 from random import randint
 from popup import LoadingPopup
 import os
@@ -35,45 +36,60 @@ class Storage():
         for locker in self.lockers:
             if locker["has_parcel"] == False:
                 loader = LoadingPopup()
-                locker["server_id"] = randint(100,999)
-                data = {'id': parcel_id, 'robot_compartment': locker['id'], 'uuid':locker["server_id"]}
+                locker["uuid"] = randint(100,999)
+                data = {'id': parcel_id, 'robot_compartment': locker['id'], 'uuid':locker["uuid"]}
                 self.req = requests.post(config.URL+'/api/parcel/load', headers=config.HEADERS, json=data)
                 print(self.req)
                 if(self.req.status_code == requests.codes.ok):
                     loader.stop_t()
-                    try:
-                        unlock.unlock(locker['id']) 
-                        locker['parcel_id'] = parcel_id
-                        locker['has_parcel'] = True
-                        self.parcels.append({'id': parcel_id, 'locker': locker['id']})
-                        self.write_to_store()
-                    except (KeyError, FileNotFoundError) as e:
-                        popup = Popup(title="Hiccup",
-                                    content=Label(text="There was a minor error:\n "+str(e), 
-                                    color=(0,0,0,1), font_size=18, pos_hint={'center_x':.5, 'center_y':.6}), 
-                                    size_hint=(None, None), size=(400,400))
-                        popup.open()
-                    label = Label(text="Load parcel into \n[size=55][color=ffb355]"+' '*6+locker['id'].strip('L')+"[/color][/size]", pos_hint={'center_x':.5, 'center_y':.6},
+                    box = FloatLayout()
+                    label = Label(text="Load parcel into \n[size=55][color=ffb355]"+' '*6+locker['id'].strip('L')+"[/color][/size]", pos_hint={'center_x':.5, 'center_y':.7},
                                 markup=True, color=(0,0,0,1))
-                    popup = Popup(title="Parcel Registered!",
-                                content=label,
+                    btn = RoundedButton(text="Finish", pos_hint={'center_x':0.5, 'center_y':0.4}, 
+                                size_hint=(0.45, 0.2), color=(0,0,0,1))
+                    btn.bind(on_press=lambda *args:self.do_load(locker))
+                    box.add_widget(label)
+                    box.add_widget(btn)
+                    self.popup = Popup(title="Parcel Registered!",
+                                content=box, auto_dismiss=False,
                                 size_hint=(None, None), size=(400, 400))
-                    popup.open()
-                    # check if all lockers are filled 
-                    if all(l['has_parcel']==True for l in self.lockers):
-                        box = FloatLayout()
-                        box.add_widget(Label(text="All the lockers are filled!\nDo you want to finish loading?", pos_hint={'center_x':0.5, 'center_y':0.7}, font_size=18, color=(0,0,0,1)))
-                        btn = RoundedButton(text="Finish", pos_hint={'center_x':0.5, 'center_y':0.4}, size_hint=(0.45, 0.2), color=(0,0,0,1))
-                        btn.bind(on_press=root.go_to_unlock)
-                        box.add_widget(btn)
-                        popup = Popup(title="Finished!", content=box, size_hint=(None, None), size=(400, 400))
-                        popup.open()
-                        return "Filled"
+                    self.popup.open()
                     return True
                 else: 
                     loader.stop_t()
                     raise ValueError(self.req.json())
                     return False
+
+    def do_load(self, locker):
+        try:
+            self.popup.dismiss()
+            unlock.unlock(locker['id'])
+        except FileNotFoundError as e:
+            popup = Popup(title="Hiccup",
+                        content=Label(text="There was a minor error:\n "+str(e), 
+                        color=(0,0,0,1), font_size=18, pos_hint={'center_x':.5, 'center_y':.6}), 
+                        size_hint=(None, None), size=(400,400))
+            popup.open()
+            return False
+        for p in self.parcels:  
+            if p['locker_id'] == locker['id']:
+                locker['parcel_id'] = p['id']
+                locker['has_parcel'] = True
+                self.parcels.append({'id': p['id'], 'locker_id': locker['id']})
+                self.write_to_store()
+        
+        # check if all lockers are filled 
+        if all(l['has_parcel']==True for l in self.lockers):
+            box = FloatLayout()
+            box.add_widget(Label(text="All the lockers are filled!\nDo you want to finish loading?", pos_hint={'center_x':0.5, 'center_y':0.7}, font_size=18, color=(0,0,0,1)))
+            btn = RoundedButton(text="Finish", pos_hint={'center_x':0.5, 'center_y':0.4}, size_hint=(0.45, 0.2), color=(0,0,0,1))
+            btn.bind(on_press=self.go_to_unlock)
+            box.add_widget(btn)
+            popup = Popup(title="Finished!", content=box, size_hint=(None, None), size=(400, 400))
+            popup.open()
+            return "Filled"
+        return True
+
 
 
     def unlock_parcel(self, code):
@@ -81,19 +97,35 @@ class Storage():
         uuid = code['uuid']
         with open(self.lockers_path) as f:
             self.lockers = json.load(f)['lockers']
-        if uuid in [str(l['server_id']) for l in self.lockers]:
+        if uuid in [str(l['uuid']) for l in self.lockers]:
             for locker in self.lockers:
                 print(locker)
                 try: 
-                    if str(locker['server_id']) == uuid:
+                    if str(locker['uuid']) == uuid:
                         print('unlock', code)
-                        #loader = LoadingPopup()
+                        loader = LoadingPopup()
                         req = requests.post(config.URL+'/api/parcel/unlock', headers=config.HEADERS, json=code)
                         print(req)
                         if (req.status_code == requests.codes.ok):
-                            #loader.stop_t()
-                            self.get_parcel(locker['parcel_id'])
-                            return unlock.unlock(locker['id'])   
+                            loader.stop_t()
+                            # load successful unlock popup
+                            box = FloatLayout()
+                            label = Label(text="Open locker\n"+" "*8+"[size=65][color=ffb355]"+locker['id'].strip('L')+"[/color][/size]",
+                                          markup=True, color=(0,0,0,1))
+                            btn = RoundedButton(text="Finish", pos_hint={'center_x':0.5, 'center_y':0.4}, size_hint=(0.45, 0.2), color=(0,0,0,1),
+                                            on_dismiss=lambda *args: self.do_unlock(locker['id']))
+                            btn.bind(on_press=lambda *args: self.do_unlock(locker['id']))
+                            box.add_widget(label)
+                            box.add_widget(btn)
+                            popup = Popup(title="Locker unlocked!", 
+                                        content=box,
+                                        size_hint=(None, None), size=(400, 400))
+                            popup.bind(on_dismiss=lambda *args: self.do_unlock(locker['id']))
+                            popup.open()
+                            return True
+                        else: 
+                            return False
+ 
                 except Exception as e:
                     popup = Popup(title="Hiccup",
                                 content=Label(text="There was a minor error:\n "+str(e), 
@@ -114,10 +146,10 @@ class Storage():
             return False
 
 
-    def get_parcel(self, id):
+    def do_unlock(self, id):
         locker = ''
         for index, parcel in enumerate(self.parcels):
-            if parcel['id'] == id:
+            if parcel['locker_id'] == id:
                 self.parcels.pop(index)
         for index, lock in enumerate(self.lockers):
             try:
@@ -125,15 +157,11 @@ class Storage():
                     locker = lock
                     self.lockers[index]['parcel_id'] = ''
                     self.lockers[index]['has_parcel'] = False
-                    self.lockers[index]['server_id'] = ''
+                    self.lockers[index]['uuid'] = ''
             except KeyError:
                 pass
         self.write_to_store()
-        text = "Open locker\n"+" "*8+"[size=65][color=ffb355]"+locker['id'].strip('L')+"[/color][/size]"
-        popup = Popup(title="Locker unlocked!", 
-                    content=Label(text=text, markup=True, color=(0,0,0,1)),
-                    size_hint=(None, None), size=(400, 400))
-        popup.open()
+        unlock.unlock(id)
         return True
 
     def write_to_store(self):
@@ -144,14 +172,14 @@ class Storage():
     
     def manual_unlock(self, input):
         if input: 
-            server_id = input[:2]
+            uuid = input[:2]
             password = input[3:]
             with open(self.lockers_path) as f:
                 self.lockers = json.load(f)['lockers']
             try: 
                 for l in self.lockers:
-                    if l['server_id'] == server_id:
-                        code = {'robot_compartment': server_id, 'password': password}
+                    if l['uuid'] == uuid:
+                        code = {'uuid': uuid, 'password': password}
                         return self.unlock_parcel(code)  
                 return False
             except KeyError: 
@@ -163,10 +191,5 @@ class Storage():
                     size_hint=(None, None), size=(400, 400))
             popup.open()
 
-    # FloatLayout:
-    #     pos_hint: {'center_x': .9, 'center_y': .9}
-    #     BorderlessButton:
-    #         on_press: root.dismiss()
-    #         size_hint: (.1, .1)
-    #         Image: 
-    #             source: app.load_resource('cancel.png')
+class RoundedButton(Button):
+    pass

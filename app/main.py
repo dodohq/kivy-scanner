@@ -192,24 +192,24 @@ class MainApp(App):
         socket = dodoWebsocket()
         return ScreenManagement()
         
-    def check_capture(self):
-        global capture
-        if not capture:
-            box = FloatLayout()
-            label = Label(text="Camera not detected!", color=(0,0,0,1))
-            button = Button(text="Try again", 
-                    pos_hint={'center_x':0.5, 'center_y':0.3})
-            button.bind(on_press=self.on_capture)
-            box.add_widget(label)
-            box.add_widget(button)
+    # def check_capture(self):
+    #     global capture
+    #     if not capture:
+    #         box = FloatLayout()
+    #         label = Label(text="Camera not detected!", color=(0,0,0,1))
+    #         button = Button(text="Try again", 
+    #                 pos_hint={'center_x':0.5, 'center_y':0.3})
+    #         button.bind(on_press=self.on_capture)
+    #         box.add_widget(label)
+    #         box.add_widget(button)
             
-            popup = Popup(title="Error",
-                        content=box,
-                        size_hint=(None, None), size=(400, 400))
-            popup.open()
-            self.t.join()
-            return False
-        return True
+    #         popup = Popup(title="Error",
+    #                     content=box,
+    #                     size_hint=(None, None), size=(400, 400))
+    #         popup.open()
+    #         self.t.join()
+    #         return False
+    #     return True
 
     def on_stop(self):
         global socket
@@ -219,26 +219,26 @@ class MainApp(App):
     def load_resource(self, string):
         return os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources/'+string))            
   
-    def load_websocket(self):
-        path = os.path.abspath(os.path.dirname(__file__)) 
-        print("loading websocket", path)
-        try:
-          p = subprocess.Popen([sys.executable, path+'/testffmpeg.py'], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+    # def load_websocket(self):
+    #     path = os.path.abspath(os.path.dirname(__file__)) 
+    #     print("loading websocket", path)
+    #     try:
+    #       p = subprocess.Popen([sys.executable, path+'/testffmpeg.py'], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
        
-          # while child process has not yet terminated 
-          while p.poll() is not None and p.poll() is not None:
-            print("comm: ", p.communicate())
-            print("return: ", p.returncode)
-          error = p.communicate()[0]
-        except ValueError:
-          popup = Popup(title="Error",
-                        content=Label(text="""Internal Websocket Error:
-                        \nThe robot couldn't connect to the websocket.
-                        \nTrying again..\n""",
-                        color=(0,0,0,1), font_size=17, pos_hint={'center_x':.5, 'center_y':.6} ),
-                        size_hint=(None, None), size=(400, 400))
-          popup.open()
-        self.load_websocket()
+    #       # while child process has not yet terminated 
+    #       while p.poll() is not None and p.poll() is not None:
+    #         print("comm: ", p.communicate())
+    #         print("return: ", p.returncode)
+    #       error = p.communicate()[0]
+    #     except ValueError:
+    #       popup = Popup(title="Error",
+    #                     content=Label(text="""Internal Websocket Error:
+    #                     \nThe robot couldn't connect to the websocket.
+    #                     \nTrying again..\n""",
+    #                     color=(0,0,0,1), font_size=17, pos_hint={'center_x':.5, 'center_y':.6} ),
+    #                     size_hint=(None, None), size=(400, 400))
+    #       popup.open()
+    #     self.load_websocket()
     
         
 

@@ -75,19 +75,18 @@ class KivyCamera(Image):
         return im
             
     def listening(self, dt):
+        print('listening')
         try:
             global code 
             if (code and self.mode=="load"):
                 result = self.store.load_parcel(code)
-                if result: 
-                    code = ""
-                if result == "Filled":
-                    self.parent.parent.go_to_unlock()
+                # import pdb; pdb.set_trace()
+                code = ""
                 
             elif (code and self.mode=="unlock"):
-                got_code = self.store.unlock_parcel(code)
-                self.t.join()
-                self.parent.parent.exit_scan()
+                if self.store.unlock_parcel(code):
+                    self.t.join()
+                    self.parent.parent.exit_scan()
 
         except ValueError as e:
             Clock.unschedule(self.listening)

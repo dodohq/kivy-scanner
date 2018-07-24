@@ -1,0 +1,64 @@
+{
+    "lockers": [
+      {
+        "has_parcel": false,
+        "id": "L1",
+        "parcel_id": "",
+        "server_id": ""
+      },
+      {
+        "has_parcel": false,
+        "id": "L2",
+        "parcel_id": "",
+        "server_id": ""
+      },
+      {
+        "has_parcel": false,
+        "id": "L3",
+        "parcel_id": "",
+        "server_id": ""
+      },
+      {
+        "has_parcel": false,
+        "id": "L4",
+        "parcel_id": "",
+        "server_id": ""
+      },
+      {
+        "has_parcel": false,
+        "id": "L5",
+        "parcel_id": "",
+        "server_id": ""
+      },
+      {
+        "has_parcel": false,
+        "id": "L7",
+        "parcel_id": "",
+        "server_id": ""
+      },
+      {
+        "has_parcel": false,
+        "id": "L8",
+        "parcel_id": "",
+        "server_id": ""
+      },
+      {
+        "has_parcel": false,
+        "id": "L9",
+        "parcel_id": "",
+        "server_id": ""
+      },
+      {
+        "has_parcel": false,
+        "id": "L10",
+        "parcel_id": "",
+        "server_id": ""
+      },
+      {
+        "has_parcel": false,
+        "id": "L12",
+        "parcel_id": "",
+        "server_id": ""
+      }
+    ]
+  }
