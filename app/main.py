@@ -108,7 +108,7 @@ class KeyinScreen(Screen):
         if not self.txt.collide_point(*touch.pos):
             print('touched outside keyboard')
             self.txt.focus = False
-            self.kb.submit()
+            Window.release_keyboard(self.kb)
         return super(TextInput, self.txt).on_touch_up(touch)
 
     def unlock(self):

@@ -120,7 +120,7 @@ class Storage():
                             box = FloatLayout()
                             label = Label(text="Open locker\n"+" "*8+"[size=65][color=ffb355]"+locker['id'].strip('L')+"[/color][/size]", pos_hint={'center_x':.5, 'center_y':.7},
                                           markup=True, color=(0,0,0,1))
-                            btn = RoundedButton(text="Finish", pos_hint={'center_x':0.5, 'center_y':0.35}, size_hint=(0.45, 0.2), color=(0,0,0,1))
+                            btn = RoundedButton(text="Unlock", pos_hint={'center_x':0.5, 'center_y':0.35}, size_hint=(0.45, 0.2), color=(0,0,0,1))
                             self.bindFn = lambda *args: self.do_unlock(locker['id'], btn)
                             btn.bind(on_press=self.bindFn)
                             box.add_widget(label)

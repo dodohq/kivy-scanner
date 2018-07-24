@@ -9,7 +9,7 @@ def unlock(locker):
   pin = str(locker_to_gpio[locker])
   gpio.setup(pin, gpio.OUT)
   gpio.output(pin, 1)
-  time.sleep(5)
+  time.sleep(10)
   gpio.output(pin, 0)
  # gpio.cleanup(pin)
   return 0
