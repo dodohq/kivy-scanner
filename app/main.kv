@@ -142,12 +142,12 @@
                 width: 50
                 allow_stretch: True
                 pos: self.parent.x * 1.35, self.parent.height * 1.18
-        BorderlessButton:
-            text: "[u]Login as admin[/u]" 
-            size_hint: (.3, .1)
-            font_size: 18
-            pos_hint: {'center_x': .15, 'center_y': .1}
-            on_press: root.manager.current = 'login'
+            BorderlessButton:
+                text: "[u]Back to main[/u]" 
+                size_hint: (.3, .1)
+                font_size: 18
+                pos_hint: {'center_x': .15, 'center_y': .1}
+                on_press: root.manager.current = 'main'   
 
             
 <LoginScreen>:

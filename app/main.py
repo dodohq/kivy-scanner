@@ -218,30 +218,15 @@ class MainApp(App):
         socket.t.join()
 
     def load_resource(self, string):
-        return os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources/'+string))            
-  
-    # def load_websocket(self):
-    #     path = os.path.abspath(os.path.dirname(__file__)) 
-    #     print("loading websocket", path)
-    #     try:
-    #       p = subprocess.Popen([sys.executable, path+'/testffmpeg.py'], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
-       
-    #       # while child process has not yet terminated 
-    #       while p.poll() is not None and p.poll() is not None:
-    #         print("comm: ", p.communicate())
-    #         print("return: ", p.returncode)
-    #       error = p.communicate()[0]
-    #     except ValueError:
-    #       popup = Popup(title="Error",
-    #                     content=Label(text="""Internal Websocket Error:
-    #                     \nThe robot couldn't connect to the websocket.
-    #                     \nTrying again..\n""",
-    #                     color=(0,0,0,1), font_size=17, pos_hint={'center_x':.5, 'center_y':.6} ),
-    #                     size_hint=(None, None), size=(400, 400))
-    #       popup.open()
-    #     self.load_websocket()
-    
-        
+        return os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'resources/'+string))    
+
+# for the admin login
+            # BorderlessButton:
+            # text: "[u]Login as admin[/u]" 
+            # size_hint: (.3, .1)
+            # font_size: 18
+            # pos_hint: {'center_x': .15, 'center_y': .1}
+            # on_press: root.manager.current = 'login'        
 
 if __name__ == '__main__':
     MainApp().run()
