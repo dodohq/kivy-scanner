@@ -1,3 +1,20 @@
 {
-  "parcels": []
+  "parcels": [
+    {
+      "id": "5b55c45932f00500149bf8c4",
+      "locker": "L1"
+    },
+    {
+      "id": "5b50777ffef71c001418c331",
+      "locker": "L2"
+    },
+    {
+      "id": "5b55a9c93934230014384dce",
+      "locker": "L3"
+    },
+    {
+      "id": "5b55c2a132f00500149bf8c2",
+      "locker": "L4"
+    }
+  ]
 }

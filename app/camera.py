@@ -21,7 +21,6 @@ class KivyCamera(Image):
     def start(self, mode, fps=30):
         self.store = Storage()
         self.mode = mode
-        self.stop_subprocess()
         self.capture = cv2.VideoCapture(0)
         global code
         code = ''
@@ -38,20 +37,23 @@ class KivyCamera(Image):
         except AttributeError: 
             pass
 
-    def stop_subprocess(self):
-        pass
     def update(self, dt):
         ret, frame = self.capture.read()
-        if frame.any():
-            decodedObjs = self.__decode(frame)
-            frame = self.__display(frame, decodedObjs)
-            texture = self.texture
-            w, h = frame.shape[1], frame.shape[0]
-            if not texture or texture.width != w or texture.height != h:
-                self.texture = texture = Texture.create(size=(w, h))
-                texture.flip_vertical()
-            texture.blit_buffer(frame.tobytes(), colorfmt='bgr')
-            self.canvas.ask_update()
+        try:    
+            if frame.any():
+                decodedObjs = self.__decode(frame)
+                frame = self.__display(frame, decodedObjs)
+                texture = self.texture
+                w, h = frame.shape[1], frame.shape[0]
+                if not texture or texture.width != w or texture.height != h:
+                    self.texture = texture = Texture.create(size=(w, h))
+                    texture.flip_vertical()
+                texture.blit_buffer(frame.tobytes(), colorfmt='bgr')
+                self.canvas.ask_update()
+            
+        except SyntaxError as e:
+            self.capture = cv2.VideoCapture(0)
+            
             
     def __decode(self, im): 
         # Find barcodes and QR codes
@@ -95,8 +97,8 @@ class KivyCamera(Image):
                     pos_hint={'center_x': 0.5, 'center_y': 0.7},
                     color=(0,0,0,1)))
             button = RoundedButton(text="Try again!",
-                    pos_hint={'center_x': 0.5, 'center_y': 0.3},
-                    size_hint=(0.3, 0.2), 
+                    pos_hint={'center_x': 0.5, 'center_y': 0.4},
+                    size_hint=(0.5, 0.2), 
                     color=(0,0,0,1))
             button.bind(on_press=lambda *args: self.restart_listening(popup))
             box.add_widget(button)

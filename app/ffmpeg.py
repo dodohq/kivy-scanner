@@ -36,7 +36,7 @@ class dodoWebsocket():
         print('starting video')
         print(self.ws)
         if self.proid == None:
-            cmd = 'ffmpeg -s 1280x720 -f avfoundation -framerate 30 -i "0" -f mpegts -codec:v mpeg1video -b 800k -r 30 ' + \
+            cmd = 'ffmpeg -s 640x480 -f video4linux2 -i /dev/video0 -f mpegts -codec:v mpeg1video -b 147456k -r 30 ' + \
                     STREAMSERVER + '/api/robot/stream?token=' + TOKEN
             pro = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True,
                                 preexec_fn=os.setsid)
@@ -75,14 +75,17 @@ class dodoWebsocket():
         print('### opened ###')
         def run(*args):
             while True:
-            # x, y = get_gpsloc()
-                sample_gps_data = '{ "x": %.4f, "y": %.4f }' % (100, 100)
+                x, y = self.get_gpsloc()
+                if not x: 
+                    x = 100
+                    y = 100
+                sample_gps_data = '{ "x": %.4f, "y": %.4f }' % (x, y)
                 print('sending', sample_gps_data)
                 ws.send(sample_gps_data)
                 time.sleep(3) 
         thread.start_new_thread(run, ())
 
-    def get_gpsloc():
+    def get_gpsloc(self):
         gpsd.connect()
         packet = gpsd.get_current()
         print(packet)

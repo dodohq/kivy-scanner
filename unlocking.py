@@ -25,7 +25,7 @@ class GPIO():
     pass
     
 if __name__ == "__main__": 
-  while True:
+  while 1:
     pin = input("Which pin? ")
     print(pin)
     unlock(pin)

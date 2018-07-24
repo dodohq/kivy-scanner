@@ -71,30 +71,30 @@ class Storage():
                         return "Filled"
                     return True
                 else: 
-                    raise ValueError(req.json())
+                    loader.stop_t()
+                    raise ValueError(self.req.json())
                     return False
 
 
     def unlock_parcel(self, code):
         code = json.loads(code)
-        parcel_id = code['id']
-        del code['id']
-        if parcel_id in [p['id'] for p in self.parcels]:
-            with open(self.lockers_path) as f:
-                self.lockers = json.load(f)['lockers']
+        uuid = code['uuid']
+        with open(self.lockers_path) as f:
+            self.lockers = json.load(f)['lockers']
+        if uuid in [str(l['server_id']) for l in self.lockers]:
             for locker in self.lockers:
+                print(locker)
                 try: 
-                    if locker['parcel_id'] == parcel_id:
-                        code['uuid'] = locker['server_id']
+                    if str(locker['server_id']) == uuid:
                         print('unlock', code)
-                        loader = LoadingPopup()
+                        #loader = LoadingPopup()
                         req = requests.post(config.URL+'/api/parcel/unlock', headers=config.HEADERS, json=code)
                         print(req)
                         if (req.status_code == requests.codes.ok):
-                            loader.stop_t()
-                            self.get_parcel(parcel_id)
+                            #loader.stop_t()
+                            self.get_parcel(locker['parcel_id'])
                             return unlock.unlock(locker['id'])   
-                except (KeyError, FileNotFoundError) as e:
+                except Exception as e:
                     popup = Popup(title="Hiccup",
                                 content=Label(text="There was a minor error:\n "+str(e), 
                                 color=(0,0,0,1), font_size=18, pos_hint={'center_x':.5, 'center_y':.6}), 

@@ -11,8 +11,7 @@ def unlock(locker):
   gpio.output(pin, 1)
   time.sleep(5)
   gpio.output(pin, 0)
-  time.sleep(1)
-  gpio.cleanup(pin)
+ # gpio.cleanup(pin)
   return 0
   
   
