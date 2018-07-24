@@ -36,7 +36,7 @@ class dodoWebsocket():
         print('starting video')
         print(self.ws)
         if self.proid == None:
-            cmd = 'ffmpeg -s 1280x720 -f avfoundation -framerate 30 -i "0" -f mpegts -codec:v mpeg1video -b 800k -r 30 ' + \
+            cmd = 'ffmpeg -s 640x480 -f video4linux2 -i /dev/video0 -f mpegts -codec:v mpeg1video -b 147456k -r 30 ' + \
                     STREAMSERVER + '/api/robot/stream?token=' + TOKEN
             pro = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True,
                                 preexec_fn=os.setsid)

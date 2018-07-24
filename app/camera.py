@@ -51,7 +51,7 @@ class KivyCamera(Image):
                 texture.blit_buffer(frame.tobytes(), colorfmt='bgr')
                 self.canvas.ask_update()
             
-        except SyntaxError as e:
+        except (AttributeError, SyntaxError) as e:
             self.capture = cv2.VideoCapture(0)
             
             

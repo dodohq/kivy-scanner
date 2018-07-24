@@ -8,6 +8,7 @@ import threading
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.config import Config
+from kivy.core.window import Window
 from kivy.uix.widget import Widget
 from kivy.uix.popup import Popup
 from kivy.uix.image import Image 

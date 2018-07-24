@@ -1,4 +1,24 @@
 {
   "parcels": [
+    {
+      "id": "5b575e8f37c306001427f0b8",
+      "locker_id": "L5"
+    },
+    {
+      "id": "5b575eef37c306001427f0b9",
+      "locker_id": "L7"
+    },
+    {
+      "id": "5b5769da37c306001427f0be",
+      "locker_id": "L8"
+    },
+    {
+      "id": "5b5769cf37c306001427f0bd",
+      "locker_id": "L9"
+    },
+    {
+      "id": "5b5769ef37c306001427f0bf",
+      "locker_id": "L10"
+    }
   ]
 }
