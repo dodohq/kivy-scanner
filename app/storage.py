@@ -73,10 +73,11 @@ class Storage():
     def do_load(self, locker, btn):
         try:
             btn.text = 'Unlocking'
+            for p in self.popups:
+                p.dismiss()
             unlock.unlock(locker['id'])
             print(len(self.popups))
-            for p in self.popups:
-              p.dismiss()
+            
         except FileNotFoundError as e:
             popup = Popup(title="Hiccup",
                         content=Label(text="There was a minor error:\n "+str(e), 
@@ -173,10 +174,11 @@ class Storage():
             except KeyError:
                 pass
         self.write_to_store()
-        unlock.unlock(id)
-        print(len(self.popups))
         for p in self.popups:
             p.dismiss()
+        unlock.unlock(id)
+        print(len(self.popups))
+     
         return True
 
     def write_to_store(self):

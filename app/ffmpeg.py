@@ -19,8 +19,6 @@ TOKEN = config.HEADERS['Authorization']
 
 class dodoWebsocket():
     def __init__(self):
-        
-        websocket.enableTrace(True)
         self.ws = websocket.WebSocketApp(WSSERVER + "/robot?token=" + TOKEN,
                                 on_message=self.on_message,
                                 on_error=self.on_error,
@@ -28,6 +26,7 @@ class dodoWebsocket():
         self.ws.on_open = self.on_open
         self.t = threading.Thread(target=self.start).start()
         self.proid = None
+        self.streaming = None
 
     def start(self):
         self.ws.run_forever()
@@ -61,7 +60,12 @@ class dodoWebsocket():
 
 
     def on_error(self, ws, error):
-        self.stop_video()
+        self.ws = websocket.WebSocketApp(WSSERVER + "/robot?token=" + TOKEN,
+                                on_message=self.on_message,
+                                on_error=self.on_error,
+                                on_close=self.on_close)
+        self.ws.on_open = self.on_open
+        self.t = threading.Thread(target=self.start).start()
         # raise 
         print('error', error)
 
@@ -77,8 +81,8 @@ class dodoWebsocket():
             if self.get_gpsloc():
                 x, y = self.get_gpsloc()
             else: 
-                x = 100
-                y = 100
+                x = 1.340149
+                y = 103.963
             sample_gps_data = '{ "x": %.4f, "y": %.4f }' % (x, y)
             print('sending', sample_gps_data)
             ws.send(sample_gps_data)

@@ -42,20 +42,25 @@ class MainScreen(Screen):
 class LoadScreen(Screen):
     def on_enter(self, **kwargs):
         global socket
+        if socket.proid != None:
+            socket.streaming = True
         socket.stop_video()
         self.ids.scanner.start(mode="load")
         
     def exit_scan(self):
         global socket
-        socket.start_video()
+        if socket.streaming == True:
+            socket.start_video()
         self.ids.scanner.stop()
         self.manager.current = "main"
         print("exit scanner called")
 
     def go_to_unlock(self):
         global socket
-        socket.start_video()
+        
         self.ids.scanner.stop()
+        if socket.streaming == True:
+            socket.start_video()
         self.manager.current = "unlock"
     
     
@@ -64,6 +69,8 @@ class UnlockScreen(Screen):
     def on_enter(self):
         start = time.time()
         global socket
+        if socket.proid != None:
+            socket.streaming = True
         socket.stop_video()
         self.ids.scanner.start(mode="unlock")
         self.timer = threading.Timer(120.0, self.exit_scan).start()
@@ -74,8 +81,10 @@ class UnlockScreen(Screen):
         except AttributeError:
             pass
         global socket
-        socket.start_video()
+        
         self.ids.scanner.stop()
+        if socket.streaming == True:
+            socket.start_video()
         self.manager.current = "rest" 
 
 

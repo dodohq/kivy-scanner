@@ -79,7 +79,9 @@ class KivyCamera(Image):
         try:
             global code 
             if (code and self.mode=="load"):
-                result = self.store.load_parcel(code)
+                if self.store.load_parcel(code):
+                    self.t.join()
+                    self.parent.parent.exit_scan()
                 # import pdb; pdb.set_trace()
                 code = ""
                 
