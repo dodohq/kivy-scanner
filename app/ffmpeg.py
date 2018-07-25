@@ -62,6 +62,7 @@ class dodoWebsocket():
 
     def on_error(self, ws, error):
         self.stop_video()
+        
         # raise 
         print('error', error)
 

@@ -1,0 +1,116 @@
+#:kivy 1.10.0
+#:set default_font_size "40sp"
+
+
+<ScreenManagement>: 
+    MainScreen:
+    LoadScreen:
+    UnlockScreen:
+
+<MainScreen>:
+    name: 'main'
+    canvas.before:
+        Rectangle: 
+            pos: self.pos
+            size: self.size
+            source: app.load_resource('background.png')
+        
+    FloatLayout:
+        Image: 
+            size_hint: (.2, .2)
+            pos_hint: {'center_x': .5, 'center_y': .8}
+            source: app.load_resource('logo.png')
+        FloatLayout:
+            size_hint: 0.7, 0.3
+            pos_hint: {'center_x': .5, 'center_y': .4}
+            RoundedButton:
+                on_press: root.manager.current = 'load'
+                size_hint: 0.4, 1
+                pos_hint: {'center_x': .25, 'center_y': .8}
+                Label: 
+                    text: 'Load'
+                    color: 0,0,0,1
+                    x: self.parent.x + 70
+                    y: self.parent.y 
+                Image: 
+                    source: app.load_resource('trolley.png')
+                    allow_stretch: True
+                    width: 50
+                    pos: self.parent.x * 1.6, self.parent.height*1.5
+            RoundedButton:
+                on_press: root.manager.current = 'unlock'
+                size_hint: 0.4, 1
+                pos_hint: {'center_x': .7, 'center_y': .8}
+                Label: 
+                    text: 'Unlock'
+                    color: 0,0,0,1
+                    x: self.parent.x + 70
+                    y: self.parent.y 
+                Image: 
+                    source: app.load_resource('padlock.png')
+                    width: 50
+                    allow_stretch: True
+                    pos: self.parent.x*1.23, self.parent.height*1.5
+
+
+<LoadScreen>:
+    name: 'load'
+    FloatLayout:
+        KivyCamera:
+            id: scanner
+            size_hint: 1, 1
+        RoundedLabel: 
+            text: 'Load your parcels'
+            font_size: 20
+            size_hint: (.5, .07)
+            pos_hint: {'center_x': .5, 'center_y': .94}
+        NormalButton: 
+            size_hint: (.3, .1)
+            pos_hint: {'center_x': .5, 'center_y': .1}
+            text: 'End loading'
+            color: 0,0,0,1
+            on_release: root.exit_scan()
+
+
+<UnlockScreen>:
+    name: 'unlock'
+    FloatLayout:
+        KivyCamera:
+            id: scanner
+            size_hint: 1, 1
+        BackButton: 
+            size_hint: 0.1, 0.14
+            pos_hint: {'center_x': .90, 'center_y': .9}
+            on_press: root.exit_scan()
+
+
+
+<RoundedLabel@Label>:
+    background_color: 0,0,0,0
+    canvas.before:
+        Color: 
+            rgba: (1,.6,0,1)
+        RoundedRectangle: 
+            pos: self.pos
+            size: self.size
+            radius: [30,]
+
+<RoundedButton@Button>:
+    background_normal: app.load_resource('buttonnorm.png')
+    background_down: app.load_resource('buttondown.png')
+    font_size: 18
+    text: root.text
+
+<NormalButton@Button>:
+    background_normal: app.load_resource('filledbutton.png')
+    font_size: 18
+    color: 1,1,1,1
+    
+<BorderlessButton@Button>:
+    background_color: 0,0,0,0
+    color: 1,.6,0,1
+    markup: True
+    font_size: 17
+
+<BackButton@Button>:
+    background_normal: app.load_resource('back.png')

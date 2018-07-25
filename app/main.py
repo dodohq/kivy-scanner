@@ -17,7 +17,6 @@ from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import ScreenManager, Screen
-from imutils.video import WebcamVideoStream
 from camera import KivyCamera
 from storage import Storage
 from keyboard import Keyboard
