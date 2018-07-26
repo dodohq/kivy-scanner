@@ -13,7 +13,9 @@ STORE_DIR = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file_
 
 class Storage():
     def __init__(self, *args):
-        self.barcodes = {"5b571972a6103f0014ed9c62": "L1", "5b571972a6103f0014ed9c48":"L2"}   # parcel id to locker 
+        self.barcodes = {"5b571972a6103f0014ed9c62": "L1", "5b571972a6103f0014ed9c48":"L2", "5b571972a6103f0014ed9c54": "L3", "5b571972a6103f0014ed9c46": "L4", "5b571972a6103f0014ed9c63": "L5", "5b571972a6103f0014ed9c55": "L7", 
+        "5b571972a6103f0014ed9c47": "L8", "5b571972a6103f0014ed9c56": "L9", "5b571972a6103f0014ed9c64": "L10", "5b571972a6103f0014ed9c65": "L12"}   # parcel id to locker 
+        self.barcodes = {"5b571972a6103f0014ed9c62": "L1", "5b571972a6103f0014ed9c48":"L2", "5b571972a6103f0014ed9c54": "L3", ""}   # parcel id to locker 
         self.qrs = {"http://qrs.ly/bj7bksn": "L1", "http://qrs.ly/p37bks7": "L2", "http://qrs.ly/ko7bks9": "L3", "http://qrs.ly/yo7bksl": "L4", "http://qrs.ly/bh7bl03": "L5", "http://qrs.ly/gs7bl0g": "L7", "http://qrs.ly/xo7bl0i": "L8", "http://qrs.ly/a37bl0l": "L9", 
         "http://qrs.ly/hq7bl0o": "L10", "http://qrs.ly/i37bl1a":"L12"}       # 9digit concat to locker
         self.popups = []
