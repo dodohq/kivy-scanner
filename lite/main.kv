@@ -87,6 +87,7 @@
 
 <RoundedLabel@Label>:
     background_color: 0,0,0,0
+    font_size: 30
     canvas.before:
         Color: 
             rgba: (1,.6,0,1)
@@ -98,12 +99,13 @@
 <RoundedButton@Button>:
     background_normal: app.load_resource('buttonnorm.png')
     background_down: app.load_resource('buttondown.png')
-    font_size: 18
+    font_name: app.load_resource('font/Quicksand-Medium')
+    font_size: 20
     text: root.text
 
 <NormalButton@Button>:
     background_normal: app.load_resource('filledbutton.png')
-    font_size: 18
+    font_size: 28
     color: 1,1,1,1
     
 <BorderlessButton@Button>:
@@ -114,3 +116,14 @@
 
 <BackButton@Button>:
     background_normal: app.load_resource('back.png')
+    
+<Popup>:
+    title_color: 1,.6,0,1
+    title_size: 20
+    title_align: 'center'
+    font_name: app.load_resource('font/Quicksand-Medium')
+    background: app.load_resource('popup.png')
+
+<Label>:
+    font_name: app.load_resource('font/Quicksand-Regular')
+    font_size: 30

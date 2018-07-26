@@ -1,31 +1,31 @@
 {
   "lockers": [
     {
-      "has_parcel": false,
+      "has_parcel": true,
       "id": "L1",
       "parcel_id": "",
       "uuid": ""
     },
     {
-      "has_parcel": false,
+      "has_parcel": true,
       "id": "L2",
-      "parcel_id": "",
-      "uuid": ""
+      "parcel_id": "5b571972a6103f0014ed9c65",
+      "uuid": 622
     },
     {
-      "has_parcel": false,
+      "has_parcel": true,
       "id": "L3",
-      "parcel_id": "",
-      "uuid": ""
+      "parcel_id": "5b571972a6103f0014ed9c48",
+      "uuid": 757
     },
     {
-      "has_parcel": false,
+      "has_parcel": true,
       "id": "L4",
       "parcel_id": "",
       "uuid": ""
     },
     {
-      "has_parcel": false,
+      "has_parcel": true,
       "id": "L5",
       "parcel_id": "",
       "uuid": ""

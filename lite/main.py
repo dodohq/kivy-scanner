@@ -26,7 +26,7 @@ class MainScreen(Screen):
 ##### PARCEL LOADING SCREEN #######
 class LoadScreen(Screen):
     def on_enter(self):
-        self.ids.scanner.start(mode="unlock")
+        self.ids.scanner.start(mode="load")
 
     def exit_scan(self):
         self.ids.scanner.stop()
