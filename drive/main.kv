@@ -1,0 +1,68 @@
+#:kivy 1.10.0
+
+<DriveAnim>:
+    canvas.before: 
+        Color: 
+            rgba: 1,1,1,1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    RoundedLabel: 
+        size_hint: (.5, .07)
+        pos_hint: {'center_x': .5, 'center_y': .92}
+        text: "Wireless Driving" 
+    Image:
+        id: wheel
+        source: app.load_resource('wheel.png')
+        size_hint: (.3, .3)
+        pos_hint: {'center_x': .5, 'center_y': .6}
+        canvas.before:
+            PushMatrix
+            Rotate:
+                angle: root.drive_angle
+                axis: 0,0,1
+                origin: self.center
+        canvas.after:
+            PopMatrix 
+    Image: 
+        id: brake 
+        source: root.brake_pic
+        color: 0,0,0,1
+        pos_hint: {'center_x': .3, 'center_y': .3}
+    BoundedLabel:
+        text: 'BRAKE'
+        background_color: 1,1,1,1
+        color: 0,0,0,1
+        pos_hint: {'center_x': .3, 'center_y': .15}
+    Image:
+        id: accel
+        source: root.accel_pic
+        color: 0,0,0,1
+        pos_hint: {'center_x': .7, 'center_y': .3}
+    BoundedLabel:
+        text: 'ACCELERATE'
+        background_color: 1,1,1,1
+        color: 0,0,0,1
+        pos_hint: {'center_x': .7, 'center_y': .15}
+
+<Image>:
+    size_hint: (.2, .2)
+
+<RoundedLabel@Label>:
+    background_color: 0,0,0,0
+    font_size: 30
+    font_name: app.load_resource('font/Quicksand-Regular')
+    canvas.before:
+        Color: 
+            rgba: (1,.6,0,1)
+        RoundedRectangle: 
+            pos: self.pos
+            size: self.size
+            radius: [30,]
+
+<BoundedLabel@Label>:
+    background_color: 0,0,0,0
+    color: 0,0,0,1
+    font_name: app.load_resource('font/Quicksand-Medium')
+    font_size: 22
