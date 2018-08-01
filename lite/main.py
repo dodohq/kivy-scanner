@@ -3,7 +3,8 @@ from kivy.app import App
 from kivy.config import Config
 from kivy.uix.screenmanager import ScreenManager, Screen
 from camera import KivyCamera
-# from storage import Storage
+from ws import dodoWebsocket
+from . import config
 
 
 Config.set('graphics', 'resizeable', '0')
@@ -38,6 +39,7 @@ class UnlockScreen(Screen):
 
 class MainApp(App):
     def build(self):
+        dodo = dodoWebsocket()
         return ScreenManagement()
 
     def load_resource(self, string):

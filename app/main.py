@@ -192,25 +192,6 @@ class MainApp(App):
         socket = dodoWebsocket()
         return ScreenManagement()
         
-    # def check_capture(self):
-    #     global capture
-    #     if not capture:
-    #         box = FloatLayout()
-    #         label = Label(text="Camera not detected!", color=(0,0,0,1))
-    #         button = Button(text="Try again", 
-    #                 pos_hint={'center_x':0.5, 'center_y':0.3})
-    #         button.bind(on_press=self.on_capture)
-    #         box.add_widget(label)
-    #         box.add_widget(button)
-            
-    #         popup = Popup(title="Error",
-    #                     content=box,
-    #                     size_hint=(None, None), size=(400, 400))
-    #         popup.open()
-    #         self.t.join()
-    #         return False
-    #     return True
-
     def on_stop(self):
         global socket
         socket.stop_video()

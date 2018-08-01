@@ -33,22 +33,24 @@ class dodoWebsocket():
         self.ws.run_forever()
 
     def start_video(self):
-        print('starting video')
-        print(self.ws)
-        if self.proid == None:
-            cmd = 'ffmpeg -s 640x480 -f video4linux2 -i /dev/video0 -f mpegts -codec:v mpeg1video -b 147456k -r 30 ' + \
-                    STREAMSERVER + '/api/robot/stream?token=' + TOKEN
-            pro = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True,
-                                preexec_fn=os.setsid)
-            self.proid = pro.pid
-            print(pro.pid, self.proid)
+        # print('starting video')
+        # print(self.ws)
+        # if self.proid == None:
+        #     cmd = 'ffmpeg -s 640x480 -f video4linux2 -i /dev/video0 -f mpegts -codec:v mpeg1video -b 147456k -r 30 ' + \
+        #             STREAMSERVER + '/api/robot/stream?token=' + TOKEN
+        #     pro = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True,
+        #                         preexec_fn=os.setsid)
+        #     self.proid = pro.pid
+        #     print(pro.pid, self.proid)
+        pass
 
     def stop_video(self):
-        print(self.proid)
-        if self.proid != None:
-            print(self.proid)
-            os.killpg(os.getpgid(self.proid), signal.SIGTERM)
-            self.proid = None
+        # print(self.proid)
+        # if self.proid != None:
+        #     print(self.proid)
+        #     os.killpg(os.getpgid(self.proid), signal.SIGTERM)
+        #     self.proid = None
+        pass
 
     def on_message(self, ws, message):
         if message == 'start':
@@ -57,8 +59,8 @@ class dodoWebsocket():
             self.stop_video()
             print('killed')
         else:
-            print('received', message)
-
+            # print('received', message)
+            pass
 
     def on_error(self, ws, error):
         self.stop_video()

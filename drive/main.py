@@ -33,7 +33,6 @@ class DriveAnim(FloatLayout):
     def drive_thread(self):
         while True: 
             angle = self.ws.angle 
-            print('angle', angle)
             if angle: 
                 self.drive(float(self.ws.angle))
         

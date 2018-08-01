@@ -1,9 +1,7 @@
 import websocket
 import subprocess
 import os
-import re
 import signal
-import config
 import threading
 import gpsd
 
@@ -19,10 +17,8 @@ TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YjU3MmI2ZGE2MTAzZjAwMT
 
 
 class dodoWebsocket():
-    letter = ''
-    angle = ''
-
     def __init__(self):
+        
         websocket.enableTrace(True)
         self.ws = websocket.WebSocketApp(WSSERVER + "/robot?token=" + TOKEN,
                                 on_message=self.on_message,
@@ -35,48 +31,16 @@ class dodoWebsocket():
     def start(self):
         self.ws.run_forever()
 
-    def start_video(self):
-        print('starting video')
-        print(self.ws)
-        if self.proid == None:
-            # 'ffmpeg -s 1280x720 -f avfoundation -framerate 30 -i "0" -f mpegts -codec:v mpeg1video -b 800k -r 30 '
-            cmd = 'ffmpeg -s 640x480 -f video4linux2 -i /dev/video0 -f mpegts -codec:v mpeg1video -b 147456k -r 30 ' + \
-                    STREAMSERVER + '/api/robot/stream?token=' + TOKEN
-            print(cmd)
-            pro = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell=True,
-                                preexec_fn=os.setsid)
-            self.proid = pro.pid
-            print(pro.pid, self.proid)
-
-    def stop_video(self):
-        if self.proid != None:
-            os.killpg(os.getpgid(self.proid), signal.SIGTERM)
-            self.proid = None
-
     def on_message(self, ws, message):
-        if message == 'start':
-            self.start_video()
-        elif message == 'end':
-            self.stop_video()
-            print('killed')
-        else:
-            print('drive', message)
-            letter = re.match('^[abo]', message)
-            digit = re.search('[-+]?\d+\.?\d?', message)
-            if letter and digit: 
-                self.letter = letter.group(0)
-                self.angle = digit.group(0)
-            else: 
-                print('received', message)
-            
+        print('received', message)
+
 
     def on_error(self, ws, error):
-        self.stop_video()
         print('error', error)
 
 
     def on_close(self, ws):
-        self.stop_video()
+        self.t.join()
         print("### closed ###")
 
 
@@ -101,5 +65,5 @@ class dodoWebsocket():
             print(packet)
             return packet.lat, packet.lon 
         except Exception as e:
-            print('gps error', e)
+            print(e)
             pass
