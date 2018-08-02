@@ -31,6 +31,17 @@ class dodoWebsocket():
 
     def start(self):
         self.ws.run_forever()
+        
+    def reinit(self):
+        if self.t: 
+            self.t.join()
+        self.ws = websocket.WebSocketApp(WSSERVER + "/robot?token=" + TOKEN,
+                                on_message=self.on_message,
+                                on_error=self.on_error,
+                                on_close=self.on_close)
+        self.ws.on_open = self.on_open
+        self.t = threading.Thread(target=self.start).start()
+        self.proid = None
 
     def start_video(self):
         # print('starting video')
@@ -72,6 +83,8 @@ class dodoWebsocket():
     def on_close(self, ws):
         self.stop_video()
         print("### closed ###")
+        self.reinit()
+        
 
 
     def on_open(self, ws):
