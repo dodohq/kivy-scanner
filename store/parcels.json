@@ -1,12 +1,28 @@
 {
   "parcels": [
     {
-      "id": "5b571972a6103f0014ed9c65",
-      "locker_id": "L2"
+      "id": "5b56ff63a6103f0014ed9c10",
+      "locker_id": "L1"
     },
     {
       "id": "5b571972a6103f0014ed9c48",
       "locker_id": "L3"
+    },
+    {
+      "id": "5b56ff63a6103f0014ed9bea",
+      "locker_id": "L4"
+    },
+    {
+      "id": "5b56ff63a6103f0014ed9c06",
+      "locker_id": "L5"
+    },
+    {
+      "id": "5b56ff63a6103f0014ed9bf4",
+      "locker_id": "L7"
+    },
+    {
+      "id": "5b56ff63a6103f0014ed9bf5",
+      "locker_id": "L8"
     }
   ]
 }

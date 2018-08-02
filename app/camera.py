@@ -75,7 +75,6 @@ class KivyCamera(Image):
         return im
             
     def listening(self, dt):
-        print('listening')
         try:
             global code 
             if (code and self.mode=="load"):
@@ -92,7 +91,7 @@ class KivyCamera(Image):
             Clock.unschedule(self.listening)
             box = FloatLayout()
             box.add_widget(Label(text="""Something went wrong with the server.
-                    \nThe parcel failed to load into the robot.""", font_size=17,
+                    \nThe robot failed to unlock the locker.""", font_size=17,
                     pos_hint={'center_x': 0.5, 'center_y': 0.7},
                     color=(0,0,0,1)))
             button = RoundedButton(text="Try again!",

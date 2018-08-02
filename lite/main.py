@@ -4,7 +4,6 @@ from kivy.config import Config
 from kivy.uix.screenmanager import ScreenManager, Screen
 from camera import KivyCamera
 from ws import dodoWebsocket
-from . import config
 
 
 Config.set('graphics', 'resizeable', '0')
