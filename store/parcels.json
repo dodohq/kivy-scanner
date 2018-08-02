@@ -1,34 +1,6 @@
 {
   "parcels": [
     {
-      "id": "5b56ff63a6103f0014ed9bf4",
-      "locker_id": "L7"
-    },
-    {
-      "id": "5b56ff63a6103f0014ed9c05",
-      "locker_id": "L2"
-    },
-    {
-      "id": "5b571a12a6103f0014ed9c82",
-      "locker_id": "L3"
-    },
-    {
-      "id": "5b571a12a6103f0014ed9c72",
-      "locker_id": "L9"
-    },
-    {
-      "id": "5b571a12a6103f0014ed9c80",
-      "locker_id": "L4"
-    },
-    {
-      "id": "5b571972a6103f0014ed9c60",
-      "locker_id": "L5"
-    },
-    {
-      "id": "5b571a12a6103f0014ed9c70",
-      "locker_id": "L8"
-    },
-    {
       "id": "5b571972a6103f0014ed9c62",
       "locker_id": "L1"
     }

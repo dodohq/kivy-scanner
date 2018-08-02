@@ -7,46 +7,46 @@
       "uuid": 411
     },
     {
-      "has_parcel": true,
+      "has_parcel": false,
       "id": "L2",
-      "parcel_id": "5b56ff63a6103f0014ed9c05",
-      "uuid": 206
+      "parcel_id": "",
+      "uuid": ""
     },
     {
-      "has_parcel": true,
+      "has_parcel": false,
       "id": "L3",
-      "parcel_id": "5b571a12a6103f0014ed9c82",
-      "uuid": 739
+      "parcel_id": "",
+      "uuid": ""
     },
     {
-      "has_parcel": true,
+      "has_parcel": false,
       "id": "L4",
-      "parcel_id": "5b571a12a6103f0014ed9c80",
-      "uuid": 726
+      "parcel_id": "",
+      "uuid": ""
     },
     {
-      "has_parcel": true,
+      "has_parcel": false,
       "id": "L5",
-      "parcel_id": "5b571972a6103f0014ed9c60",
-      "uuid": 415
+      "parcel_id": "",
+      "uuid": ""
     },
     {
       "has_parcel": true,
       "id": "L7",
-      "parcel_id": "5b56ff63a6103f0014ed9bf4",
-      "uuid": 896
+      "parcel_id": "",
+      "uuid": ""
     },
     {
-      "has_parcel": true,
+      "has_parcel": false,
       "id": "L8",
-      "parcel_id": "5b571a12a6103f0014ed9c70",
-      "uuid": 357
+      "parcel_id": "",
+      "uuid": ""
     },
     {
-      "has_parcel": true,
+      "has_parcel": false,
       "id": "L9",
-      "parcel_id": "5b571a12a6103f0014ed9c72",
-      "uuid": 722
+      "parcel_id": "",
+      "uuid": ""
     },
     {
       "has_parcel": false,
