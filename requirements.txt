@@ -8,7 +8,7 @@ idna==2.6
 imutils==0.4.6
 Kivy==1.10.1.dev0
 Kivy-Garden==0.1.4
-numpy==1.14.4
+numpy==1.22.0
 opencv-python==3.4.1.15
 Pygments==2.2.0
 pyzbar==0.1.7
